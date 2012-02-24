@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if invite_accepted or client_login_required %}
+<ul class="messagelist">
+    {% if invite_accepted %}
+    <li>Please check your e-mail for instructions on how to install the application on your phone.
+            <a href="/">Hide</a></li>
+    {% endif %}
+    {% if client_login_required %}
+    <li>You can start viewing your driving trip details once you start running the application on your phone.</li>
+    {% endif %}
+</ul>
+{% endif %}
+<br class="clear" />
+
+<div id="controls" style="float: left; width:30%;">
+    <p><b><a href="/traces/trips/">View Trips</a></b></p>
+    View more details about your trips in a given date range.
+
+    <p></p>
+
+    <p><b><a href="/traces/summary/">Summary statistics</a></b></p>
+    View summary statistics across all your trips.
+
+
+    {% if user.is_staff or user_is_approver %}
+    <br /><br /><br />
+    <h1>Staff tools</h1>
+
+    <p><b><a href="/traces/debug/">Trace Debug</a></b></p>
+    View raw data traces.
+
+    <p></p>
+
+    <p><b><a href="/slicer/pendingapproval/">Manage Trips</a></b></p>
+    Manage processed trips.
+
+    <p></p>
+    {% endif %}
+
+    {% if user.is_staff %}
+    <p><b><a href="/admin/">Admin</a></b></p>
+    Django admin
+
+    <p></p>
+
+    <p><b><a href="/traces/process/">Process data</a></b></p>
+    Process raw trace data in a given time period to create trip summaries.
+
+    <p></p>
+
+    <p><b><a href="/user/invite/">Invite</a></b></p>
+    Invite users to create an account.
+
+    <p></p>
+
+    <p><b><a href="/traces/uptime/">Uptime Report</a></b></p>
+    View details on how long the application has been running on your phone.
+
+    <p></p>
+
+    <p><b><a href="traces/jobs/">Job Status</a></b></p>
+    View the status of periodic jobs.
+
+    <p></p>
+
+    <p><b><a href="/traces/dataonmap/">View data on map</a></b></p>
+    View Accident and Crime data on a map.
+
+    <p></p>
+
+    <p><b><a href="/traces/battery/">Battery life</a></b></p>
+    View battery life data about an account.
+
+    <p></p>
+
+    <p><b><a href="/slicer/tools/">Slicer tools</a></b></p>
+    Slicer related tools are available on this page.
+
+    <p></p>
+
+    {% endif %}
+</div>
+
+{% if not client_login_required %}
+<div id="trip_summary" style="float: right; width: 60%;">
+
+    <form action="" method="get">
+        <select name="period">
+            <option value="yesterday" {% if period == "yesterday" %}selected="selected"{% endif %}>Yesterday</option>
+            <option value="three" {% if period == "three" %}selected="selected"{% endif %}>Last 3 days</option>
+            <option value="week" {% if period == "week" %}selected="selected"{% endif %}>Last 7 days</option>
+        </select>
+        <input type="submit" value="Load" />
+        {% if trips %}
+        &nbsp;&nbsp;<a href="/traces/trips/?start_date={{start_date|urlencode}}&end_date={{end_date|urlencode}}&user={{user.id}}">More details</a>
+        {% endif %}
+    </form>
+    <table cellspacing="0" id="result_list">
+        <thead>
+            <tr>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Distance (miles)</th>
+                <th>Travel mode</th>
+                <th>Visualization</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for ts in trips %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+                <td>{{ ts.get_start_time_display }}</td>
+                <td>{{ ts.get_end_time_display }}</td>
+                <td>{{ ts.get_distance_traveled_miles }}</td>
+                <td>{{ ts.get_travel_mode_display }}</td>
+                <td>
+                    {% if ts.vis_available %}
+                    <a href="/traces/vis/{{ ts.id }}/">
+                        <img src="/static/web/images/web/map.png" alt="View" /></a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+     </table>
+
+    {% if last_process_time %}
+    <br class="clear" />
+    <i>Trips processed till {{ last_process_time }}</i>
+    {% endif %}
+
+    {% if user.is_staff %}
+    <br class="clear" />
+    Using timezone {{ timezone }}
+    {% endif %}
+    
+</div>
+{% endif %}
+
+{% endblock content %}

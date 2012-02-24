@@ -1,0 +1,6 @@
+from django.conf.urls.defaults import *
+
+urlpatterns = patterns('xlab.views',
+    url(r'^api/budget/', 'budget_lines'),
+    url(r'^api/text/', 'text_questions'),
+)

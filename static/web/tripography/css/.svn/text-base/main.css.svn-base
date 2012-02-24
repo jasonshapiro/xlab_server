@@ -1,0 +1,417 @@
+/* =========================
+ universal
+========================= */
+
+body {
+	padding: 0;
+	margin: 0;
+	font-family: Arial, Helvetica, Verdana, Sans-Serif;
+	font-size: .8em;
+	text-align: center;
+    background: white url("../images/background.png") repeat-x;
+}
+
+#wrapper {
+    text-align: left;
+    height: 100%;
+    width: 1000px;
+    background: #fff;
+    padding-bottom: 50px;
+    margin: 50px auto;
+}
+
+.clear { clear: both; }
+
+#content {
+   text-align: left;
+}
+
+.lightpadding {
+    padding: 0 25px 25px 25px;
+}
+
+#content.front { padding: 0px; }
+
+h1 {
+    color: #66CC33;
+}
+
+.big-button {
+    padding: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.25em;
+    text-decoration: none;
+    background: #66CC33;;
+    text-align: center;
+    position: relative;
+     -moz-border-radius: 8px; 
+  -webkit-border-radius: 8px; 
+          border-radius: 8px; 
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+}
+
+a:link, a:visited {
+    color: #339900;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    text-decoration: underline; 
+}
+
+.hidden {
+    display: none;	
+}
+
+.errorlist {
+    color: red;
+   
+}
+
+/* =========================
+ header, navigation
+========================= */
+
+#header {
+    height: 110px;
+    background: white url("../images/header.png") no-repeat no-repeat;
+}
+
+#header nav ul,
+#header nav ul li {
+    padding: 0;
+    margin: 0;
+}
+
+#header nav ul li {
+    list-style: none;
+    float: left;
+}
+
+#header nav {
+    float: left;
+    padding-left: 325px;
+    padding-top: 20px;
+}
+
+#header nav a {
+    display: block;
+    border-top: 10px solid #fff;
+    border-bottom: 5px solid #fff;
+    /*border-top: 5px solid #66CC33;*/
+    text-decoration: none;
+    border-right: 1px solid #ccc;
+    height: 40px;
+}
+
+#header nav a.last {
+    border-right: 0px;	
+}
+
+#header nav a span {
+    padding: 15px 20px 0 20px;
+    display: block;
+}
+
+#header nav a:link,
+#header nav a:visited { 
+	
+}
+
+#header nav a:hover,
+#header nav a:active {
+	background: #CCFF99;
+	color: #360;
+}
+
+#header nav a.active {
+    border-top: 10px solid #AEA;	
+}
+
+
+.green-button {
+    -moz-box-shadow:inset 0px 0px 0px 0px #c1ed9c;
+    -webkit-box-shadow:inset 0px 0px 0px 0px #c1ed9c;
+    box-shadow:inset 0px 0px 0px 0px #c1ed9c;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9dce2c), color-stop(1, #8cb82b) );
+    background:-moz-linear-gradient( center top, #9dce2c 5%, #8cb82b 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9dce2c', endColorstr='#8cb82b');
+    background-color:#9dce2c;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    display:inline-block;
+    color:#ffffff !important;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:8px 41px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #689324;
+}
+
+.green-button {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8cb82b), color-stop(1, #9dce2c) );
+    background:-moz-linear-gradient( center top, #8cb82b 5%, #9dce2c 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#9dce2c');
+    background-color:#8cb82b;
+}
+
+.green-button {
+    position:relative;
+    top:1px;
+}
+
+.getting-started-step {
+    font-size: 3em;
+    color: #336699;
+    font-weight: bold;
+    vertical-align: middle;
+    padding-right: 1em;
+}
+
+
+
+
+
+/* =========================
+ index: front page
+========================= */
+
+#front-matter {
+    padding: 25px;	
+}
+
+#splash {
+    
+    height: 300px;
+    width: 100%;
+}
+
+#splash .byline {
+    font-size: 2em;
+    padding-left: 30px;
+    padding-top: 20px;	
+    position: absolute;
+    width: 275px;
+}
+
+#splash .signup {
+    
+    position: relative;
+    top: 170px;
+    left: 50px;
+}
+
+#front-matter section.left {
+    width: 556px;
+    padding-bottom: 1.2em; 
+}
+
+#front-matter div.left {
+	float: left;
+	width: 556px;
+}
+
+#front-matter div.right {
+    float: right;
+    width: 344px;	
+}
+
+/* =========================
+user forms
+========================= */
+
+div.user-form {
+	text-align: center;
+}
+
+
+div.user-form form {
+	width: 35%;
+    text-align: left;
+    margin: 30px auto 0 auto;
+}
+
+div.user-form label {
+	width: 150px;
+	float: left;
+}
+
+div.user-form .big-button {
+    width: 100%;
+}
+
+.errors {
+    color: red;	
+}
+
+/* =========================
+dashboard
+========================= */
+
+#dashboard{
+    	
+}
+
+#dashboard .left {
+	width: 200px;
+	padding: 0 25px 0 25px;
+	float: left;
+	text-align: center;
+}
+
+#dashboard .right {
+    width: 725px;
+    padding: 0 25px 0 0;
+    float: right;
+    text-align: left;
+}
+
+/* =========================
+user info
+========================= */
+
+.user-photo {
+    display: block;
+    width: 200px;
+    height: 200px;
+    background: lightgray;
+    margin-bottom: .5em;
+    background: url("../images/user_picture_test.jpg") center center;	
+}
+
+
+/* =========================
+app buttons
+========================= */
+
+.apps .app-button {
+    border: 1px solid #ccc;
+    margin-bottom: .5em;
+    text-align: center;
+}
+
+.apps a {
+    padding: .5em;
+    font-weight: bold;
+    font-size: 1.1em;
+    display: block;
+}
+
+.apps a:link, 
+.apps a:visited {
+	color: #339900;
+}
+
+.apps a:hover,
+.apps a:active {
+	background: #cdc;
+	text-decoration: none;
+}
+
+/* =========================
+modules
+========================= */
+
+.module { 
+	margin-bottom: 3em;
+}
+
+.module-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    clear: both;
+    margin-bottom: .25em;
+}
+
+.module-subtitle {
+    clear: both;
+    font-weight: bold;
+    font-size: 1.2em;	
+}
+
+/* =========================
+trip list for the dashboard/profile view
+========================= */
+
+/* NOTE: for trip explorer styles, see tripexplorer.css */
+
+/* see tripexplorer.css */
+
+/* =========================
+scores and statistics
+========================= */
+
+.statistics {
+    clear: both;	
+}
+
+.statistics h3 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: .25em 0 0 0;
+    padding: 0;
+}
+
+.statistics .score {
+   border: 1px solid #339933;
+   font-size: 2em;
+   font-weight: bold;
+   text-align: center;
+   float: left;
+   padding: .5em; 
+   margin: .25em;
+   width: 80px;
+}
+
+.statistics .text {
+    padding: 1em;	
+}
+
+.statistics .description {
+    float: left;
+    padding-left: .5em;
+}
+
+.statistics .description span {
+
+}
+
+.statistics .item {
+    padding-left: 7px;
+    margin-bottom: .3em;
+}
+
+/*
+.statistics .item:hover {
+    background: #ddd;
+    border-left: 7px solid #339933;
+    padding-left: 0px;
+    cursor: pointer;
+}*/
+
+.statistics .item.active {
+    background: #ddd;
+    border-left: 7px solid #339933;
+    padding-left: 0px;
+    cursor: pointer;
+}
+
+/* =========================
+statistics module
+========================= */
+
+.statistics-comparisons {
+    border-collapse: collapse;	
+}
+
+.statistics-comparisons > thead > tr> td,
+.statistics-comparisons > tbody > tr > td {
+    border-style: dotted;
+    border-width: 0 0 1px 0;
+    border-color: #ccc;
+    border-spacing: 0px;
+    padding: 0px;
+}

@@ -1,0 +1,62 @@
+#server {
+#    server_name  www.milesense.com milecents.com www.milecents.com milsense.com www.milsense.com milesence.com www.milesence.com berkeleytelematics.com www.berkeleytelematics.com dev.berkeleytelematics.com;
+#    server_name ec2-107-20-49-145.compute-1.amazonaws.com;
+#    rewrite ^(.*) http://milesense.com$1 permanent;
+#    rewrite ec2-107-20-49-145.compute-1.amazonaws.com$1 permanent;
+#}
+
+server {
+    listen       80;
+    # server_name  milesense.com;
+    server_name ec2-107-20-49-145.compute-1.amazonaws.com;
+    
+    rewrite ec2-107-20-49-145.compute-1.amazonaws.com$1 permanent;
+
+    client_max_body_size 10M;
+
+    #charset koi8-r;
+
+    #access_log  logs/host.access.log  main;
+
+    set $static_file_root "/home/traveler/web-env/modechoice/static/";
+    set $admin_media "/home/traveler/web-env/lib/python2.6/site-packages/django/contrib/admin/media/";
+
+    location = /favicon.ico {
+        alias $static_file_root/favicon.ico;
+    }
+
+    location = /robots.txt {
+        alias $static_file_root/robots.txt;
+    }
+
+    location ^~ /static/ {
+        # TODO: The static file caching expires everyday at 8 am.
+        expires @8h0m;
+        add_header Cache-Control public;
+        alias $static_file_root;
+    }
+
+    location ^~ /media/ {
+        expires 3d;
+        add_header Cache-Control public;
+        alias $admin_media;
+    }
+
+    location / {
+	uwsgi_pass 127.0.0.1:49152;
+	# include       /home/milesense/nginx/conf/uwsgi_params;
+
+	uwsgi_send_timeout      600;
+        uwsgi_read_timeout      600;
+    }
+
+
+    error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+}

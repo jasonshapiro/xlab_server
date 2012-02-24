@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/earlgrey_mcr/!svn/ver/37/api
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/earlgrey_mcr/!svn/ver/2/api/__init__.py
+END
+handlers.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/earlgrey_mcr/!svn/ver/2/api/handlers.py
+END
+exceptions.py
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/earlgrey_mcr/!svn/ver/2/api/exceptions.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/earlgrey_mcr/!svn/ver/37/api/urls.py
+END
+v2.py
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/earlgrey_mcr/!svn/ver/37/api/v2.py
+END

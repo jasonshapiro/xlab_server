@@ -1,0 +1,38 @@
+<form action="" method="get" >
+    <table>
+        <tr>
+            <td>
+            <select name="group_id">
+                {% for g in groups %}
+                <option value="{{ g.id }}" {% if selected_group == g.id %} selected="selected" {% endif %}>{{ g.name }}</option>
+                {% endfor %}
+            </select>
+            </td>
+            <td>
+                <input type="submit" value="Load users" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% if user_list %}
+<div id="select_user">
+    <form action="" method="get" >
+        <input type="hidden" name="group_id" value="{{ selected_group }}" />
+        <table>
+            <tr>
+                <td>
+                <select name="user_id">
+                    {% for u in user_list %}
+                    <option value="{{ u.id }}" {% if selected_user == u.id %} selected="selected" {% endif %}>{{ u.username }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td>
+                    <input type="submit" value="Submit" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endif %}

@@ -1,0 +1,23 @@
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/web/css/redmond/jquery-ui-1.8.7.custom.css" />
+
+<style type="text/css">
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="/static/web/js/third-party/jquery-ui-1.8.7.custom.min.js"></script>
+<script type="text/javascript" src="/static/web/js/third-party/jquery-ui-timepicker-addon.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.pickerfield').datetimepicker();
+    });
+</script>
+{% endblock %}

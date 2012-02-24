@@ -1,0 +1,199 @@
+/* =========================
+trip explorer
+========================= */
+
+#trip-explorer {
+	
+}
+
+#trip-explorer h1 {
+    margin: 0 0 25px 0;
+    padding: 0px;
+}
+
+#trip-explorer-filters {
+    width: 225px;
+    float: left;
+}
+
+
+#trip-explorer-map-wrapper {
+    width: 100%px;
+    height: 370px;
+    margin-bottom: 25px;
+}
+
+#map_canvas {
+	width: 100%;
+	height: 100%;
+    float: right;
+}
+
+#trip-explorer-trips-list {
+    float: left;
+    width: 725px;	
+}
+
+#trip-explorer-trips-list .tripsummary-table {
+    clear: both;
+}
+
+#trip-explorer-trips-list .tripsummary-table tbody tr.active:hover,
+#trip-explorer-trips-list .tripsummary-table tbody tr.active {
+    background: #66cc66;    
+}
+
+/* =========================
+controls
+========================= */
+
+#trip-explorer-controls .big-button {
+	font-size: 1em;
+	padding: 10px;	
+}
+
+/* =========================
+trip list
+========================= */
+
+.tripsummary-table thead {
+    font-weight: bold;	
+}
+
+
+.tripsummary-table {
+    font-size: .9em;
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.tripsummary-table td {
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    border-color: #ccc;
+    border-spacing: 0px;
+    padding: .25em;
+    /*border-style: dotted;*/
+    border-collapse: collapse;
+}   
+
+.tripsummary-table .origin_address,
+.tripsummary-table .dest_address {
+}
+
+.tripsummary-table .travel_mode,
+.tripsummary-table .start_time,
+.tripsummary-table .duration,
+.tripsummary-table .distance {
+    text-align: right;
+    width: 75px;
+}
+
+.tripsummary-table tbody tr:hover .travel_mode{
+	background: #E0EEEE no-repeat no-repeat center left url('../images/icons/wrench-icon.png');
+	cursor: pointer;
+}
+
+
+.tripsummary-table .addresses {
+    
+}
+
+
+.tripsummary-table .data a.edit-link {
+	width: 16px;
+	height: 16px;
+	display: block;
+	background:  url('../images/icons/wrench-icon.png');
+	cursor: pointer;
+}
+
+.tripsummary-table .data a.save-link {
+    width: 16px;
+    height: 16px;
+    display: block;
+    background:  url('../images/icons/floppy-icon.png');
+    cursor: pointer;
+}
+
+.tripsummary-table .data a.expand-link {
+    background: white;
+    display: block;
+    width: 16px;
+    height: 16px;
+    float: right;
+}
+
+.tripsummary-table .data:hover a.expand-link {
+    background: url('../images/icons/magnifier-zoom-in-icon.png');
+    cursor: pointer;
+}
+
+
+.tripsummary-table .edit-mode {
+    background: #ccc;	
+}
+
+.tripsummary-table .trip_color {
+    width: 21px;	
+}
+
+.tripsummary-table .trip_color span {
+    display: block;
+    width: 15px;
+    height: 15px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.tripsummary-table .data .active-trip,
+.tripsummary-table .data .active-trip:hover {
+	background: #f4f0be;
+}
+
+.tripsummary-table .data:hover {
+    background: #f4f0be;	
+}
+
+
+/*
+.tripsummary-table .data:hover .travel_mode {
+    background: url('../images/icons/wrench-icon.png') #ddd no-repeat no-repeat 1.5em center;
+    cursor: pointer;
+}*/
+
+.tripsummary-table .data .notes {
+	overflow: auto;
+	overflow-x: hidden;
+	width: 170px !important;
+}
+
+.tripsummary .data .notes .toggleEdit-preview-textarea {
+    min-width: 150px !important;
+    width: 150px !important;
+}
+
+
+.tripsummary-table .data:hover .notes {
+    background: #ddd;
+    cursor: pointer;	
+}
+
+.tripsummary-table .toggleEdit-preview,
+.tripsummary-table .toggleEdit-preview:hover {
+	padding: 2px !important;
+	border: 0px !important;
+}
+
+/*
+.tripsummary-table .data .travel_mode_edit {
+    text-align: left;
+    width: 90px !important;
+    position: relative;
+}*/
+
+
+.tripsummary-table .data2-content {
+    padding: .25em;	
+}

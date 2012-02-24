@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Send an invitation{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="/">Home</a>
+  &rsaquo;
+  Send an invitation
+</div>
+{% endblock %}
+
+{% block content %}
+    <h1>Send an invitation</h1>
+
+    {% if error_msg %}
+    <ul class="errorlist"><li>{{ error_msg }}</li></ul>
+    {% endif %}
+
+    {% if success_msg %}
+    <ul class="messagelist">
+        <li>{{ success_msg }}</li>
+    </ul>
+    {% endif %}
+    <br class="clear" />
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>{{ form.as_table }}</table>
+        <input type="submit" value="Send Invitation">
+    </form>
+
+    {% if invitations %}    
+    <br class="clear" />
+    
+    <h2>Invitations</h2>
+
+    <div class="module filtered" id="changelist" style="width: 80%;">
+         <table cellspacing="0" id="result_list">
+                <thead>
+                    <tr>
+                        <th>Invited by</th>
+                        <th>Recipient name</th>
+                        <th>Recipient e-mail</th>
+                        <th>Accepted</th>
+                        <th>Sent date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for i in invitations %}
+                    <tr class="{% cycle 'row1' 'row2' %}">
+                        <th>{{ i.user }}</th>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.invite_email }}</td>
+                        <td>{{ i.is_accepted|yesno:"Yes,No" }}</td>
+                        <td>{{ i.sent_date|date:"DATETIME_FORMAT" }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+
+         </table>
+    </div>
+    {% endif %}
+{% endblock %}

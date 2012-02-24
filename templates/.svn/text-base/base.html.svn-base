@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        
+    <link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="/media/css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="/media/css/changelists.css" /> 
+    {% block stylesheets %}{% endblock %}
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/web/js/third-party/django_csrf_protect.js"></script>
+    {% block scripts %}{% endblock %}
+    
+    <title>{% block title %}Quantified Traveler{% endblock %}</title>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name">{% block page_header %}Quantified Traveler{% endblock %}</h1>
+        </div>
+
+        {% if user.username %}
+        <div id="user-tools">
+            Welcome, <strong>{{ user.username }}</strong> /
+            <a href="/accounts/logout">Logout</a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- END Header -->
+
+    {% block breadcrumbs %}{% endblock %}
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

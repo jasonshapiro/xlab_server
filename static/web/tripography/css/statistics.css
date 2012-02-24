@@ -1,0 +1,91 @@
+.trends {
+    clear: both;
+    width: 100%;
+    height: 300px;
+}
+
+.trends .view {
+	float: right;
+}
+
+.trends .view .button.active {
+    background: #51B848;
+}
+
+.trends .bottom_controls .navigator {
+    float: left;
+}
+
+.trends .controls .button {
+    padding: .5em;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin: .1em;
+    color: white;
+    background: #339933;
+    cursor: pointer;
+}
+
+.trends .controls .lines .button {
+	background: white;
+	color: #666;
+}
+
+.trends .controls .lines .button:hover {
+    background: #ddd;	
+}
+
+.trends .button .flag {
+    display: block;
+    height: 12px;
+    width: 12px;
+    float: left;
+    margin-right: .5em;
+    border: 1px solid #666;
+    padding: 1px;	
+}
+
+.trends .button.disabled .flag {
+    background: white !important;
+}
+
+#trends_canvas {
+    height: 280px;
+    clear: both;
+}
+
+
+.trends .controls .view .button:hover {	
+	cursor: pointer;
+	background: #51B848;
+}
+
+.trends .lines .button {
+	
+}
+
+#trends_scroller {
+    width: 892px;
+    margin: 30px auto 25px 50px;
+}
+
+.nodata {
+    font-size: 3em;
+    text-align: center;
+    padding-top: 3em;
+    display: block;	
+}
+
+.trends .lines {
+    float: left;	
+}
+
+/*======================*/
+
+.comparisons {
+    clear: both;	
+}
+
+.comparisons .plot {
+	height: 60px;
+}

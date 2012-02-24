@@ -1,0 +1,9 @@
+Dependencies:
+Django - v1.2.3 or higher
+Django applications:
+    - South
+    - Django Debug Toolbar
+    - Piston
+
+flup
+psycopg2

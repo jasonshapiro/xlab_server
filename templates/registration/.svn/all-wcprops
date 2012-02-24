@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/earlgrey_mcr/!svn/ver/2/templates/registration
+END
+register.html
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/earlgrey_mcr/!svn/ver/2/templates/registration/register.html
+END
+logged_out.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/earlgrey_mcr/!svn/ver/2/templates/registration/logged_out.html
+END
+login.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/earlgrey_mcr/!svn/ver/2/templates/registration/login.html
+END

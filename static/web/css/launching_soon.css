@@ -1,0 +1,44 @@
+body{
+    font-family: Helvetica Neue, Arial, sans-serif; background-color:#FFFFFF; font-size:10.2pt; line-height:14pt; color:#6d6f71; margin:0; padding:0}
+form{ margin:0; padding:0;}
+
+#wrapper{
+    width:760px; height:360px;
+    position:absolute; left:50%; top:48%; margin:-240px 0 0 -380px;
+}
+#logo_wrapper{
+    width:260px; height:480px; float:left;position: absolute; left:0; top:100px;
+}
+
+#bubble_wrapper{
+    width:495px; height:360px;
+    position:absolute; right:0;}
+p{ margin:0px;}
+.title{ font-size:1.63em; padding-bottom:16px;}
+.text_input{
+    border: 1px solid #d1d1d0; background: #FFF;
+    font-size: 1em;
+    margin-top:5px; width:300px; height:18px; padding:3px}
+.btn_go{
+   background-image:url('/static/web/images/launching_soon/btn_go.jpg'); background-repeat:no-repeat; width:45px; height:25px; padding-top:5px;
+   text-indent: -9999px; border:none; cursor:pointer;}
+.btn_go:hover{
+   background-image:url('/static/web/images/launching_soon/btn_go_hover.jpg'); background-repeat:no-repeat; }
+#bottom-div{
+    background-image:url('/static/web/images/launching_soon/bubble_bottom.jpg');
+    background-repeat:no-repeat;
+    background-position:right bottom;
+    height:29px;
+}
+#top-div{
+    background-image:url('/static/web/images/launching_soon/bubble_middle.jpg');
+    background-repeat:repeat-y;
+    background-position:right 100px;
+}
+#content{
+    background-image:url('/static/web/images/launching_soon/bubble_top.jpg');
+    background-repeat:no-repeat;
+    background-position:right top;
+    padding:100px 30px 0 70px;
+    margin:0;
+}
