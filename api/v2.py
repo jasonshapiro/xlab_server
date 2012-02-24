@@ -20,7 +20,7 @@ from piston.handler import AnonymousBaseHandler
 
 from api.exceptions import *
 from mcuser.models import *
-from xlab.env_settings import *
+from xlab_server.env_settings import *
 
 API_VERSION = 2
 

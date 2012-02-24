@@ -14,7 +14,7 @@ DB_HOST = ''
 DB_PORT = '5432'
 
 AUTHENTICATION_BACKENDS = (
-    'xlab.backends.CaseInsensitiveModelBackend',
+    'xlab_server.backends.CaseInsensitiveModelBackend',
 )
 
 #For django-debug-toolbar
@@ -37,7 +37,7 @@ API_SECRET_KEY = 'fswehw7et912ur2rf7#Y@^nfhfbqwme34f&HB&T24gvdkk'
 
 #LOG_FILE = '/var/log/apps/modechoice/modechoice.log'
 #LOG_FILE = '/home/traveler/logs/web-env-xlab/xlab.log'
-LOG_FILE = os.path.abspath(os.path.dirname(__file__)) + '/xlab.log'
+LOG_FILE = os.path.abspath(os.path.dirname(__file__)) + '/../logs/xlab.log'
 
 logging.basicConfig(
     level = logging.DEBUG,

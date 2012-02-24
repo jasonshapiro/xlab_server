@@ -4,8 +4,8 @@ from mailgun import *
 
 import pytz
 
-from xlab.env_settings import *
-from xlab.settings import TIME_ZONE
+from xlab_server.env_settings import *
+from xlab_server.settings import TIME_ZONE
 
 def get_down_sample_factor(count, max_allowed=1000, default_sample_rate=10):
     """

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from xlab import env_settings
+from xlab_server import env_settings
 
 from django.contrib import admin
 admin.autodiscover()
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     (r'^accounts/createnewaccount/$', 'mcuser.views.register'), #okay
     (r'^accounts/profile/$', 'mcuser.views.profile'), #updated for xlab (see TODO in mcuser.views.index)
 
-    (r'^user/', include('xlab.mcuser.urls')), #okay
+    (r'^user/', include('xlab_server.mcuser.urls')), #okay
 
     # TODO: Add admin documentation?
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -28,10 +28,10 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)), #okay
 
     #TODO: Should future API be handled through this for user-specific data?
-    (r'^api/', include('xlab.api.urls')), #contains relics
+    (r'^api/', include('xlab_server.api.urls')), #contains relics
 
     #XLAB
-    (r'^experiments/', include('xlab.experiments.urls')), #better be okay
+    (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay
         
 )
 

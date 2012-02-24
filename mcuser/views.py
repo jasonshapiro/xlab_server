@@ -15,7 +15,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from lib.utils import *
 from mcuser.forms import *
 from mcuser.models import *
-from xlab.env_settings import *
+from xlab_server.env_settings import *
 
 def index(request):
     

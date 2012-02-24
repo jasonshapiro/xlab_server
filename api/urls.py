@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
-from xlab.api import v2
+from xlab_server.api import v2
 
 class CsrfExemptResource( Resource ):
     def __init__( self, handler, authentication = None ):

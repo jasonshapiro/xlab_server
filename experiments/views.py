@@ -113,6 +113,9 @@ def budget_lines(request):
                 logging.info("BL result was saved successfully - %s, %s" % (bl_id, bl_username))
 
                 response = HttpResponse("1")
+            #elif 'format' in request.GET:
+                #if request.GET['format'] == 'json':
+                    #patrick, do your thing 
             else:
                 response = HttpResponse(homemade_string_parser())
 
