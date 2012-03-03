@@ -1,5 +1,6 @@
 import logging
 import random
+import simplejson as json
 
 from experiments.models import *
 from django.http import HttpResponse
@@ -9,7 +10,30 @@ def budget_lines(request):
     
     bl_list = list()
     
-    def homemade_string_parser():
+    
+    def json_homemade_string_generator():
+                     
+        #PATRICK: Modeify to display timer class
+                 
+        json_bl_list = list();
+        
+     
+#        data = serializers.serialize('json', Timer.objects.all())
+        
+        b_lines = BudgetLine.objects.all()
+        for bl in b_lines:
+            s = json.dumps({'id': bl.id, 'geofence': { 'title': bl.geofence.title, 'lat': bl.geofence.lat,  'lon': bl.geofence.lon ,
+           'radius': bl.geofence.radius} , 'budget_line_info': {'title': bl.budget_line_info.title,  
+           'prob_x': float(bl.budget_line_info.prob_x) , 'probabilistic': '1' if bl.budget_line_info.probabilistic else '0',
+           'x_label': bl.budget_line_info.x_label,'x_units':bl.budget_line_info.x_units,  'x_max': bl.budget_line_info.x_max,
+           'x_min':bl.budget_line_info.x_min, 'y_label': bl.budget_line_info.y_label,  'y_units': bl.budget_line_info.y_units,
+           'y_max':bl.budget_line_info.y_max, 'y_min': bl.budget_line_info.y_min  }})
+            json_bl_list.append(s);
+            print '\n'.join([l.rstrip() for l in  s.splitlines()]) 
+        
+        return json_bl_list
+    
+    def homemade_string_generator():
         #TODO: modify so that b_lines are selected selectively
         #
         #For each experiment (Java object XLabBudgetLineExperiement): 
@@ -62,6 +86,8 @@ def budget_lines(request):
                                           '1' if bl.budget_line_info.probabilistic else '0',bl.budget_line_info.prob_x,#2
                                           bl.budget_line_info.x_label, bl.budget_line_info.x_units, bl.budget_line_info.x_max, bl.budget_line_info.x_min,#4
                                           bl.budget_line_info.y_label, bl.budget_line_info.y_units, bl.budget_line_info.y_max, bl.budget_line_info.y_min ) )#4
+                
+                
                 for i in range(1,bl.budget_line_info.number_sessions+1):
                     line_chosen = (int)((random.random() * bl.budget_line_info.number_sessions) // 1)
                     bl_list[len(bl_list)-1] = bl_list[len(bl_list)-1] + ('session_parser,%s,%s,' % ( i, line_chosen) )
@@ -72,12 +98,9 @@ def budget_lines(request):
                             winner = 'x'
                         else:
                             winner = 'y'                            
-                        bl_list[len(bl_list)-1] = bl_list[len(bl_list)-1] + ( 'line_parser,%s,%s,%s,%s,' % (j, x_intercept, y_intercept, winner) )
+                        bl_list[len(bl_list)-1] = bl_list[len(bl_list)-1] + ( 'line_parser,%s,%s,%s,%s,' % (j, x_intercept, y_intercept, winner) )        
             return "\n".join(bl_list)
     
-    #TODO: Make this
-    #def json_response():
-        
     try:
         if request.method == 'GET':
             #TODO: This is an ugly hack. A non idempotent request like this
@@ -113,11 +136,19 @@ def budget_lines(request):
                 logging.info("BL result was saved successfully - %s, %s" % (bl_id, bl_username))
 
                 response = HttpResponse("1")
-            #elif 'format' in request.GET:
-                #if request.GET['format'] == 'json':
-                    #patrick, do your thing 
-            else:
-                response = HttpResponse(homemade_string_parser())
+               
+            elif 'format' in request.GET:
+                if request.GET['format'] == 'json':
+                    response = HttpResponse(json_homemade_string_generator())  
+                    
+                    
+            else:                                                 
+              #  response = HttpResponse(homemade_string_generator())  
+                response = HttpResponse(json_homemade_string_generator())  
+                    
+                    
+                
+                             
 
 
     except Exception as e:
@@ -129,7 +160,7 @@ def budget_lines(request):
 
 def text_questions(request):
     
-    def homemade_string_parser():
+    def homemade_string_generator():
         t_questions = TextQuestion.objects.all()
         if (len(t_questions) == 0):
             return "blank"
@@ -167,7 +198,7 @@ def text_questions(request):
 
                 response = HttpResponse("1")
             else:
-                response = HttpResponse(homemade_string_parser())
+                response = HttpResponse(homemade_string_generator())
 
     except Exception as e:
         logging.exception( str(e) )

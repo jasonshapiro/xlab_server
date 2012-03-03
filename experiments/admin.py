@@ -1,6 +1,11 @@
 from experiments.models import *
 from django.contrib import admin
 
+class TimerAdmin(admin.ModelAdmin):
+    list_display = ('title', 'EXPERIMENT_TYPE_CHOICES', 'min_interval', 'max_interval', 'boolMonday', 'boolTuesday',
+                'boolWednesday', 'boolThursday', 'boolFriday', 'boolSaturday', 'boolSunday', 'startDate', 
+                'endDate', 'startTime', 'endTime')
+
 class GeoFenceAdmin(admin.ModelAdmin):
     list_display = ('id',  'title', 'lat', 'lon', 'radius', 'description', 'created_date')
 
@@ -37,6 +42,7 @@ class TextQuestionInfoAdmin(admin.ModelAdmin):
 class TextQuestionResultAdmin(admin.ModelAdmin):
     list_display = ('id',  'user', 'text_question_info', 'response', 'created_date')
 
+admin.site.register(Timer, TimerAdmin)
 admin.site.register(Geofence, GeoFenceAdmin)
 admin.site.register(BudgetLine,BudgetLineAdmin)
 admin.site.register(BudgetLineInfo,BudgetLineInfoAdmin)

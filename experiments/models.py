@@ -3,6 +3,35 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
+
+#PATRICK: Add Timer class here
+
+class Timer(models.Model):
+    
+    title = models.CharField(max_length=128, unique=True)
+    EXPERIMENT_TYPE_CHOICES = (
+    ('0', 'Static'),
+    ('1', 'Dynamic'),
+    )    
+    min_interval = models.IntegerField(help_text="In minutes",editable = True)
+    max_interval = models.IntegerField(help_text="In minutes",editable = True)
+    
+    boolMonday = models.BooleanField(default=False, editable=True)
+    boolTuesday = models.BooleanField(default=False,editable=True)
+    boolWednesday = models.BooleanField(default=False, editable=True)
+    boolThursday = models.BooleanField(default=False, editable=True)
+    boolFriday = models.BooleanField(default=False, editable=True)    
+    boolSaturday = models.BooleanField(default=False, editable = True)
+    boolSunday = models.BooleanField(default=False, editable = True)
+    
+    startDate = models.DateField(editable = True)
+    endDate = models.DateField(editable = True)
+    startTime = models.IntegerField(help_text="In minutes", editable = True)
+    endTime = models.IntegerField(help_text="In minutes", editable = True)
+    
+    def __unicode__(self):
+        return "%s" % (self.title)
+
 class Geofence(models.Model):
     
     title = models.CharField(max_length=128, unique=True)
@@ -47,10 +76,12 @@ class BudgetLine(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence)
     budget_line_info = models.ForeignKey(BudgetLineInfo)
+    #PATRICK: Uncomment this:
+    timer = models.ForeignKey(Timer)
     user = models.ManyToManyField(User)
 
     def __unicode__(self):
-        return "%s - %s at %s" % (self.id, self.budget_line_info, self.geofence)
+        return "%s - %s at %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
     
     def save(self):
         if not self.id:
