@@ -4,7 +4,6 @@ django-debug-toolbar==0.9.4
 django-piston==0.2.3
 django-extensions==0.7.1
 django-south==0.7.3
-django-simplejson==2.3.3
 psycopg2==2.4.1 # should enter sudo apt-get build-dep python-psycopg2 beforehand
 boto==2.2.2
 mailgun==0.1
