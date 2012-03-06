@@ -9,25 +9,27 @@ from django.contrib.auth.models import User
 class Timer(models.Model):
     
     title = models.CharField(max_length=128, unique=True)
-    EXPERIMENT_TYPE_CHOICES = (
-    ('0', 'Static'),
-    ('1', 'Dynamic'),
-    )    
-    min_interval = models.IntegerField(help_text="In minutes",editable = True)
-    max_interval = models.IntegerField(help_text="In minutes",editable = True)
+    TIMER_TYPE_CHOICES = (
+                               (0, 'Static'),
+                               (1, 'Dynamic'),
+                               )
+    experimentType = models.IntegerField(max_length = 1, verbose_name = "Type", help_text="static fixes times, dynamic waits for responses", choices = TIMER_TYPE_CHOICES)
+            
+    min_interval = models.IntegerField(help_text="In minutes.",editable = True)
+    max_interval = models.IntegerField(help_text="In minutes.",editable = True)
     
-    boolMonday = models.BooleanField(default=False, editable=True)
-    boolTuesday = models.BooleanField(default=False,editable=True)
-    boolWednesday = models.BooleanField(default=False, editable=True)
-    boolThursday = models.BooleanField(default=False, editable=True)
-    boolFriday = models.BooleanField(default=False, editable=True)    
-    boolSaturday = models.BooleanField(default=False, editable = True)
-    boolSunday = models.BooleanField(default=False, editable = True)
+    boolMonday = models.BooleanField(default=False, editable=True, verbose_name = "Active Monday")
+    boolTuesday = models.BooleanField(default=False,editable=True, verbose_name = "Active Tuesday")
+    boolWednesday = models.BooleanField(default=False, editable=True, verbose_name = "Active Wednesday")
+    boolThursday = models.BooleanField(default=False, editable=True, verbose_name = "Active Thursday")
+    boolFriday = models.BooleanField(default=False, editable=True, verbose_name = "Active Friday")
+    boolSaturday = models.BooleanField(default=False, editable = True, verbose_name = "Active Saturday")
+    boolSunday = models.BooleanField(default=False, editable = True, verbose_name = "Active Sunday")
     
     startDate = models.DateField(editable = True)
     endDate = models.DateField(editable = True)
-    startTime = models.IntegerField(help_text="In minutes", editable = True)
-    endTime = models.IntegerField(help_text="In minutes", editable = True)
+    startTime = models.IntegerField(help_text="In minutes since midnight, applied daily.", editable = True)
+    endTime = models.IntegerField(help_text="In minutes since midnight, applied daily.", editable = True)
     
     def __unicode__(self):
         return "%s" % (self.title)
@@ -35,10 +37,10 @@ class Timer(models.Model):
 class Geofence(models.Model):
     
     title = models.CharField(max_length=128, unique=True)
-    lat = models.FloatField(null=True)
-    lon = models.FloatField(null=True)
+    lat = models.FloatField()
+    lon = models.FloatField()
     radius = models.IntegerField(help_text="In meters.")
-    description  = models.TextField(null=True, blank=True)
+    description  = models.TextField(blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -74,14 +76,19 @@ class BudgetLineInfo(models.Model):
         
 class BudgetLine(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    geofence = models.ForeignKey(Geofence)
+    geofence = models.ForeignKey(Geofence, blank=True, null=True,help_text = "For reminders only. Can be blank")
     budget_line_info = models.ForeignKey(BudgetLineInfo)
-    #PATRICK: Uncomment this:
-    timer = models.ForeignKey(Timer)
-    user = models.ManyToManyField(User)
+    timer = models.ForeignKey(Timer, help_text = "Must select always, but irrelevant if timer status is None.")
+    TIMER_STATUS_CHOICES = (
+                            (0, 'None'),
+                            (1, 'Reminder Only'),
+                            (2, 'Restrictive'),
+                            )
+    timer_status = models.IntegerField(max_length = 1, verbose_name = "timer status", help_text = "Restrictive timers make a subject wait to complete an experiment segment", choices = TIMER_STATUS_CHOICES)
+    user = models.ManyToManyField(User, null = True, blank = True, help_text = "Currently a meaningless field.")
 
     def __unicode__(self):
-        return "%s - %s at %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
+        return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
     
     def save(self):
         if not self.id:

@@ -5,33 +5,35 @@ import simplejson as json
 from experiments.models import *
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.core import serializers
+from django.forms.models import model_to_dict
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        super(DecimalEncoder, self).default(o)
 
 def budget_lines(request):
     
     bl_list = list()
     
-    
-    def json_homemade_string_generator():
+    def json_string_generator():
                      
-        #PATRICK: Modeify to display timer class
-                 
         json_bl_list = list();
-        
      
-#        data = serializers.serialize('json', Timer.objects.all())
-        
         b_lines = BudgetLine.objects.all()
         for bl in b_lines:
-            s = json.dumps({'id': bl.id, 'geofence': { 'title': bl.geofence.title, 'lat': bl.geofence.lat,  'lon': bl.geofence.lon ,
-           'radius': bl.geofence.radius} , 'budget_line_info': {'title': bl.budget_line_info.title,  
-           'prob_x': float(bl.budget_line_info.prob_x) , 'probabilistic': '1' if bl.budget_line_info.probabilistic else '0',
-           'x_label': bl.budget_line_info.x_label,'x_units':bl.budget_line_info.x_units,  'x_max': bl.budget_line_info.x_max,
-           'x_min':bl.budget_line_info.x_min, 'y_label': bl.budget_line_info.y_label,  'y_units': bl.budget_line_info.y_units,
-           'y_max':bl.budget_line_info.y_max, 'y_min': bl.budget_line_info.y_min  }})
-            json_bl_list.append(s);
-            print '\n'.join([l.rstrip() for l in  s.splitlines()]) 
+            if bl.geofence == None:
+                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
+            else:
+                geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
+                
+            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer_status': bl.timer_status}
+                
+            json_bl_list.append(json.dumps(bl_dict, cls=DecimalEncoder))
         
-        return json_bl_list
+        return json.dumps(json_bl_list, cls=DecimalEncoder)
     
     def homemade_string_generator():
         #TODO: modify so that b_lines are selected selectively
@@ -82,7 +84,7 @@ def budget_lines(request):
         else:
             for bl in b_lines:
                 bl_list.append('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,' % (bl.id,bl.budget_line_info.title,#2
-                                          bl.geofence.title,bl.geofence.lat, bl.geofence.lon, bl.geofence.radius,#4
+                                          ('' if bl.geofence == None else bl.geofence.title),(0 if bl.geofence == None else bl.geofence.lat), (0 if bl.geofence == None else bl.geofence.lon), (0 if bl.geofence == None else bl.geofence.radius),#4
                                           '1' if bl.budget_line_info.probabilistic else '0',bl.budget_line_info.prob_x,#2
                                           bl.budget_line_info.x_label, bl.budget_line_info.x_units, bl.budget_line_info.x_max, bl.budget_line_info.x_min,#4
                                           bl.budget_line_info.y_label, bl.budget_line_info.y_units, bl.budget_line_info.y_max, bl.budget_line_info.y_min ) )#4
@@ -139,18 +141,13 @@ def budget_lines(request):
                
             elif 'format' in request.GET:
                 if request.GET['format'] == 'json':
-                    response = HttpResponse(json_homemade_string_generator())  
+                    response = HttpResponse(json_string_generator())  
                     
                     
             else:                                                 
               #  response = HttpResponse(homemade_string_generator())  
-                response = HttpResponse(json_homemade_string_generator())  
-                    
-                    
+                response = HttpResponse(homemade_string_generator())  
                 
-                             
-
-
     except Exception as e:
         logging.exception( str(e) )
         response = HttpResponse("0")

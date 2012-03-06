@@ -2,7 +2,7 @@ from experiments.models import *
 from django.contrib import admin
 
 class TimerAdmin(admin.ModelAdmin):
-    list_display = ('title', 'EXPERIMENT_TYPE_CHOICES', 'min_interval', 'max_interval', 'boolMonday', 'boolTuesday',
+    list_display = ('title', 'experimentType', 'min_interval', 'max_interval', 'boolMonday', 'boolTuesday',
                 'boolWednesday', 'boolThursday', 'boolFriday', 'boolSaturday', 'boolSunday', 'startDate', 
                 'endDate', 'startTime', 'endTime')
 
@@ -10,7 +10,7 @@ class GeoFenceAdmin(admin.ModelAdmin):
     list_display = ('id',  'title', 'lat', 'lon', 'radius', 'description', 'created_date')
 
 class BudgetLineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'budget_line_info', 'geofence')
+    list_display = ('id', 'budget_line_info', 'geofence', 'timer', 'timer_status')
 
 class BudgetLineInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'number_sessions', 'lines_per_session',
