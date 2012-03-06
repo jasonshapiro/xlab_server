@@ -1,3 +1,4 @@
+import decimal
 import logging
 import random
 import simplejson as json
@@ -7,12 +8,16 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.forms.models import model_to_dict
+from decimal import Decimal
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):
             return float(o)
+        if isinstance(o, datetime.date):
+            return {'year': o.year, 'month': o.month, 'date': o.day}
         super(DecimalEncoder, self).default(o)
+        
 
 def budget_lines(request):
     
@@ -29,7 +34,7 @@ def budget_lines(request):
             else:
                 geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
                 
-            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer_status': bl.timer_status}
+            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]), 'timer_status': bl.timer_status}
                 
             json_bl_list.append(json.dumps(bl_dict, cls=DecimalEncoder))
         
@@ -169,6 +174,22 @@ def text_questions(request):
 
             return "\n".join(tq_list)
 
+    def json_string_generator():
+        json_tq_list = list();
+     
+        t_questions = TextQuestion.objects.all()
+        for tq in t_questions:
+            if tq.geofence == None:
+                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
+            else:
+                geofenceDict = model_to_dict(tq.geofence, fields=[field.name for field in tq.geofence._meta.fields])
+                
+            tq_dict = {'id': tq.id, 'geofence': geofenceDict , 'text_question_info': model_to_dict(tq.text_question_info, fields=[field.name for field in tq.text_question_info._meta.fields])}
+                
+            json_tq_list.append(json.dumps(tq_dict, cls=DecimalEncoder))
+        
+        return json.dumps(json_tq_list, cls=DecimalEncoder)
+
     try:
         if request.method == 'GET':
             #TODO: This is an ugly hack. A non idempotent request like this
@@ -194,6 +215,10 @@ def text_questions(request):
                 logging.info("TQ result was saved successfully - %s, %s, %s" % (tq_id, tq_response, tq_username))
 
                 response = HttpResponse("1")
+            elif 'format' in request.GET:
+                if request.GET['format'] == 'json':
+                     response = HttpResponse(json_string_generator());
+            
             else:
                 response = HttpResponse(homemade_string_generator())
 
