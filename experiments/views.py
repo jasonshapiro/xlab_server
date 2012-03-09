@@ -19,26 +19,26 @@ class DecimalEncoder(json.JSONEncoder):
         super(DecimalEncoder, self).default(o)
         
 
+def json_string_generator(list):
+                 
+    json_list = list();
+ 
+    for entry in list:
+        if entry.geofence == None:
+            geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
+        else:
+            geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
+            
+        bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]), 'timer_status': bl.timer_status}
+            
+        json_list.append(bl_dict)
+    
+    return json.dumps(json_bl_list, cls=DecimalEncoder)
+
+
 def budget_lines(request):
     
-    bl_list = list()
-    
-    def json_string_generator():
-                     
-        json_bl_list = list();
-     
-        b_lines = BudgetLine.objects.all()
-        for bl in b_lines:
-            if bl.geofence == None:
-                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
-            else:
-                geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
-                
-            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]), 'timer_status': bl.timer_status}
-                
-            json_bl_list.append(json.dumps(bl_dict, cls=DecimalEncoder))
-        
-        return json.dumps(json_bl_list, cls=DecimalEncoder)
+    bl_list = list()    
     
     def homemade_string_generator():
         #TODO: modify so that b_lines are selected selectively
@@ -101,7 +101,7 @@ def budget_lines(request):
                     for j in range(1,bl.budget_line_info.lines_per_session+1):
                         x_intercept = (random.random() * (bl.budget_line_info.x_max - bl.budget_line_info.x_min) + bl.budget_line_info.x_min)
                         y_intercept = (random.random() * (bl.budget_line_info.y_max - bl.budget_line_info.y_min) + bl.budget_line_info.y_min)
-                        if (random.random() < bl.budget_line_info.prob_x):
+                        if (random.random() < float(bl.budget_line_info.prob_x)):
                             winner = 'x'
                         else:
                             winner = 'y'                            
@@ -146,7 +146,7 @@ def budget_lines(request):
                
             elif 'format' in request.GET:
                 if request.GET['format'] == 'json':
-                    response = HttpResponse(json_string_generator())  
+                    response = HttpResponse(json_string_generator(BudgetLine.objects.all()))  
                     
                     
             else:                                                 
@@ -173,22 +173,6 @@ def text_questions(request):
                 tq.geofence.lon, tq.geofence.radius, tq.text_question_info.question ) )
 
             return "\n".join(tq_list)
-
-    def json_string_generator():
-        json_tq_list = list();
-     
-        t_questions = TextQuestion.objects.all()
-        for tq in t_questions:
-            if tq.geofence == None:
-                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
-            else:
-                geofenceDict = model_to_dict(tq.geofence, fields=[field.name for field in tq.geofence._meta.fields])
-                
-            tq_dict = {'id': tq.id, 'geofence': geofenceDict , 'text_question_info': model_to_dict(tq.text_question_info, fields=[field.name for field in tq.text_question_info._meta.fields])}
-                
-            json_tq_list.append(json.dumps(tq_dict, cls=DecimalEncoder))
-        
-        return json.dumps(json_tq_list, cls=DecimalEncoder)
 
     try:
         if request.method == 'GET':
@@ -217,7 +201,7 @@ def text_questions(request):
                 response = HttpResponse("1")
             elif 'format' in request.GET:
                 if request.GET['format'] == 'json':
-                     response = HttpResponse(json_string_generator());
+                     response = HttpResponse(json_string_generator(TextQuestion.objects.all()));
             
             else:
                 response = HttpResponse(homemade_string_generator())

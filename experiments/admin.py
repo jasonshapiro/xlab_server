@@ -2,7 +2,7 @@ from experiments.models import *
 from django.contrib import admin
 
 class TimerAdmin(admin.ModelAdmin):
-    list_display = ('title', 'experimentType', 'min_interval', 'max_interval', 'boolMonday', 'boolTuesday',
+    list_display = ('title', 'timer_type', 'min_interval', 'max_interval', 'boolMonday', 'boolTuesday',
                 'boolWednesday', 'boolThursday', 'boolFriday', 'boolSaturday', 'boolSunday', 'startDate', 
                 'endDate', 'startTime', 'endTime')
 

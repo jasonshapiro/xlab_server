@@ -13,7 +13,7 @@ class Timer(models.Model):
                                (0, 'Static'),
                                (1, 'Dynamic'),
                                )
-    experimentType = models.IntegerField(max_length = 1, verbose_name = "Type", help_text="static fixes times, dynamic waits for responses", choices = TIMER_TYPE_CHOICES)
+    timer_type = models.IntegerField(max_length = 1, verbose_name = "Type", help_text="static fixes times, dynamic waits for responses", choices = TIMER_TYPE_CHOICES, default=0)
             
     min_interval = models.IntegerField(help_text="In minutes.",editable = True)
     max_interval = models.IntegerField(help_text="In minutes.",editable = True)
@@ -77,7 +77,7 @@ class BudgetLineInfo(models.Model):
 class BudgetLine(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True,help_text = "For reminders only. Can be blank")
-    budget_line_info = models.ForeignKey(BudgetLineInfo)
+    budget_line_info = models.ForeignKey(BudgetLineInfo, default=BudgetLineInfo.objects.all().get(id=1))
     timer = models.ForeignKey(Timer, help_text = "Must select always, but irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
                             (0, 'None'),
