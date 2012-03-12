@@ -116,7 +116,10 @@ def budget_lines(request):
             # DV: Apparently a GET needs to get the token, followed by a POST. This could be a serious pain.
             # http://stackoverflow.com/questions/4455845/how-do-i-generate-a-django-csrf-key-for-my-iphone-and-android-apps-that-want-to
             
+            logging.info("In BL get method")
+            
             if 'bl_id' in request.GET:
+                logging.info("Uploading BL Response")
                 bl_username = request.GET['bl_username']
                 bl_id = request.GET['bl_id']
                 bl_session = request.GET['bl_session']
@@ -130,14 +133,12 @@ def budget_lines(request):
                 bl_winner = request.GET['bl_winner']
                 bl_line_chosen_boolean = request.GET['bl_line_chosen_boolean']
                 
-                bl = BudgetLine.objects.get(pk=bl_id)
+                logging.info("bl_line_chosen_boolean: %s" % bl_line_chosen_boolean)
+                logging.info("(bl_line_chosen_boolean == 'true') : %s" % (bl_line_chosen_boolean == 'true'))
 
+                bl = BudgetLine.objects.get(pk=bl_id)
                 bl_user = User.objects.get(username=bl_username)
-                # tq_response = True if tq_response == "1" else False
-                
-                # TODO clean up response
-                
-                blr = BudgetLineResult(user = bl_user, budget_line_info = bl, session = bl_session, line = bl_line, x_intercept = bl_x_intercept, y_intercept = bl_y_intercept, x = bl_x, y = bl_y, lat = bl_lat, lon = bl_lon, winner = bl_winner, line_chosen_boolean = bl_line_chosen_boolean)
+                blr = BudgetLineResult(user = bl_user, budget_line_info = bl, session = bl_session, line = bl_line, x_intercept = bl_x_intercept, y_intercept = bl_y_intercept, x = bl_x, y = bl_y, lat = bl_lat, lon = bl_lon, winner = bl_winner, line_chosen_boolean = (bl_line_chosen_boolean == 'true'))
                 blr.save()
 
                 logging.info("BL result was saved successfully - %s, %s" % (bl_id, bl_username))
@@ -149,8 +150,7 @@ def budget_lines(request):
                     response = HttpResponse(json_string_generator())  
                     
                     
-            else:                                                 
-              #  response = HttpResponse(homemade_string_generator())  
+            else:
                 response = HttpResponse(homemade_string_generator())  
                 
     except Exception as e:

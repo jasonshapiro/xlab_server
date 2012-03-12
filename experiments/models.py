@@ -15,21 +15,21 @@ class Timer(models.Model):
                                )
     timer_type = models.IntegerField(max_length = 1, verbose_name = "Type", help_text="static fixes times, dynamic waits for responses", choices = TIMER_TYPE_CHOICES, default=0)
             
-    min_interval = models.IntegerField(help_text="In minutes.",editable = True)
-    max_interval = models.IntegerField(help_text="In minutes.",editable = True)
+    min_interval = models.IntegerField(help_text="In minutes. Applies to dynamic only.",editable = True)
+    max_interval = models.IntegerField(help_text="In minutes. Applies to dynamic only.",editable = True)
     
-    boolMonday = models.BooleanField(default=False, editable=True, verbose_name = "Active Monday")
-    boolTuesday = models.BooleanField(default=False,editable=True, verbose_name = "Active Tuesday")
-    boolWednesday = models.BooleanField(default=False, editable=True, verbose_name = "Active Wednesday")
-    boolThursday = models.BooleanField(default=False, editable=True, verbose_name = "Active Thursday")
-    boolFriday = models.BooleanField(default=False, editable=True, verbose_name = "Active Friday")
-    boolSaturday = models.BooleanField(default=False, editable = True, verbose_name = "Active Saturday")
-    boolSunday = models.BooleanField(default=False, editable = True, verbose_name = "Active Sunday")
+    boolMonday = models.BooleanField(default=False, editable=True, verbose_name = "Active Monday", help_text="Applies to static only.")
+    boolTuesday = models.BooleanField(default=False,editable=True, verbose_name = "Active Tuesday", help_text="Applies to static only.")
+    boolWednesday = models.BooleanField(default=False, editable=True, verbose_name = "Active Wednesday", help_text="Applies to static only.")
+    boolThursday = models.BooleanField(default=False, editable=True, verbose_name = "Active Thursday", help_text="Applies to static only.")
+    boolFriday = models.BooleanField(default=False, editable=True, verbose_name = "Active Friday", help_text="Applies to static only.")
+    boolSaturday = models.BooleanField(default=False, editable = True, verbose_name = "Active Saturday", help_text="Applies to static only.")
+    boolSunday = models.BooleanField(default=False, editable = True, verbose_name = "Active Sunday", help_text="Applies to static only.")
     
-    startDate = models.DateField(editable = True)
-    endDate = models.DateField(editable = True)
-    startTime = models.IntegerField(help_text="In minutes since midnight, applied daily.", editable = True)
-    endTime = models.IntegerField(help_text="In minutes since midnight, applied daily.", editable = True)
+    startDate = models.DateField(editable = True, help_text="Applies to static only.")
+    endDate = models.DateField(editable = True, help_text="Applies to static only.")
+    startTime = models.IntegerField(help_text="In minutes since midnight, applied daily. Applies to static only.", editable = True)
+    endTime = models.IntegerField(help_text="In minutes since midnight, applied daily. Applies to static only.", editable = True)
     
     def __unicode__(self):
         return "%s" % (self.title)
@@ -116,7 +116,7 @@ class BudgetLineResult(models.Model):
     line_chosen_boolean = models.BooleanField(editable=False)
 
     def __unicode__(self):
-        return "%s - %s" % (self.user, self.queryLocationPair)
+        return "%s - %s" % (self.user, self.budget_line_info)
     
 class TextQuestionInfo(models.Model):
     question = models.TextField()
