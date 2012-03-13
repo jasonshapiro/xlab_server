@@ -1,3 +1,4 @@
+import decimal
 import logging
 import random
 import simplejson as json
@@ -5,33 +6,39 @@ import simplejson as json
 from experiments.models import *
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.core import serializers
+from django.forms.models import model_to_dict
+from decimal import Decimal
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        if isinstance(o, datetime.date):
+            return {'year': o.year, 'month': o.month, 'date': o.day}
+        super(DecimalEncoder, self).default(o)
+        
 
 def budget_lines(request):
     
     bl_list = list()
     
-    
-    def json_homemade_string_generator():
+    def json_string_generator():
                      
-        #PATRICK: Modeify to display timer class
-                 
         json_bl_list = list();
-        
      
-#        data = serializers.serialize('json', Timer.objects.all())
-        
         b_lines = BudgetLine.objects.all()
         for bl in b_lines:
-            s = json.dumps({'id': bl.id, 'geofence': { 'title': bl.geofence.title, 'lat': bl.geofence.lat,  'lon': bl.geofence.lon ,
-           'radius': bl.geofence.radius} , 'budget_line_info': {'title': bl.budget_line_info.title,  
-           'prob_x': float(bl.budget_line_info.prob_x) , 'probabilistic': '1' if bl.budget_line_info.probabilistic else '0',
-           'x_label': bl.budget_line_info.x_label,'x_units':bl.budget_line_info.x_units,  'x_max': bl.budget_line_info.x_max,
-           'x_min':bl.budget_line_info.x_min, 'y_label': bl.budget_line_info.y_label,  'y_units': bl.budget_line_info.y_units,
-           'y_max':bl.budget_line_info.y_max, 'y_min': bl.budget_line_info.y_min  }})
-            json_bl_list.append(s);
-            print '\n'.join([l.rstrip() for l in  s.splitlines()]) 
+            if bl.geofence == None:
+                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
+            else:
+                geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
+                
+            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]), 'timer_status': bl.timer_status}
+                
+            json_bl_list.append(bl_dict)
         
-        return json_bl_list
+        return json.dumps(json_bl_list, cls=DecimalEncoder)
     
     def homemade_string_generator():
         #TODO: modify so that b_lines are selected selectively
@@ -82,7 +89,7 @@ def budget_lines(request):
         else:
             for bl in b_lines:
                 bl_list.append('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,' % (bl.id,bl.budget_line_info.title,#2
-                                          bl.geofence.title,bl.geofence.lat, bl.geofence.lon, bl.geofence.radius,#4
+                                          ('' if bl.geofence == None else bl.geofence.title),(0 if bl.geofence == None else bl.geofence.lat), (0 if bl.geofence == None else bl.geofence.lon), (0 if bl.geofence == None else bl.geofence.radius),#4
                                           '1' if bl.budget_line_info.probabilistic else '0',bl.budget_line_info.prob_x,#2
                                           bl.budget_line_info.x_label, bl.budget_line_info.x_units, bl.budget_line_info.x_max, bl.budget_line_info.x_min,#4
                                           bl.budget_line_info.y_label, bl.budget_line_info.y_units, bl.budget_line_info.y_max, bl.budget_line_info.y_min ) )#4
@@ -94,7 +101,7 @@ def budget_lines(request):
                     for j in range(1,bl.budget_line_info.lines_per_session+1):
                         x_intercept = (random.random() * (bl.budget_line_info.x_max - bl.budget_line_info.x_min) + bl.budget_line_info.x_min)
                         y_intercept = (random.random() * (bl.budget_line_info.y_max - bl.budget_line_info.y_min) + bl.budget_line_info.y_min)
-                        if (random.random() < bl.budget_line_info.prob_x):
+                        if (random.random() < float(bl.budget_line_info.prob_x)):
                             winner = 'x'
                         else:
                             winner = 'y'                            
@@ -109,7 +116,10 @@ def budget_lines(request):
             # DV: Apparently a GET needs to get the token, followed by a POST. This could be a serious pain.
             # http://stackoverflow.com/questions/4455845/how-do-i-generate-a-django-csrf-key-for-my-iphone-and-android-apps-that-want-to
             
+            logging.info("In BL get method")
+            
             if 'bl_id' in request.GET:
+                logging.info("Uploading BL Response")
                 bl_username = request.GET['bl_username']
                 bl_id = request.GET['bl_id']
                 bl_session = request.GET['bl_session']
@@ -123,14 +133,12 @@ def budget_lines(request):
                 bl_winner = request.GET['bl_winner']
                 bl_line_chosen_boolean = request.GET['bl_line_chosen_boolean']
                 
-                bl = BudgetLine.objects.get(pk=bl_id)
+                logging.info("bl_line_chosen_boolean: %s" % bl_line_chosen_boolean)
+                logging.info("(bl_line_chosen_boolean == 'true') : %s" % (bl_line_chosen_boolean == 'true'))
 
+                bl = BudgetLine.objects.get(pk=bl_id)
                 bl_user = User.objects.get(username=bl_username)
-                # tq_response = True if tq_response == "1" else False
-                
-                # TODO clean up response
-                
-                blr = BudgetLineResult(user = bl_user, budget_line_info = bl, session = bl_session, line = bl_line, x_intercept = bl_x_intercept, y_intercept = bl_y_intercept, x = bl_x, y = bl_y, lat = bl_lat, lon = bl_lon, winner = bl_winner, line_chosen_boolean = bl_line_chosen_boolean)
+                blr = BudgetLineResult(user = bl_user, budget_line_info = bl, session = bl_session, line = bl_line, x_intercept = bl_x_intercept, y_intercept = bl_y_intercept, x = bl_x, y = bl_y, lat = bl_lat, lon = bl_lon, winner = bl_winner, line_chosen_boolean = (bl_line_chosen_boolean == 'true'))
                 blr.save()
 
                 logging.info("BL result was saved successfully - %s, %s" % (bl_id, bl_username))
@@ -139,18 +147,12 @@ def budget_lines(request):
                
             elif 'format' in request.GET:
                 if request.GET['format'] == 'json':
-                    response = HttpResponse(json_homemade_string_generator())  
+                    response = HttpResponse(json_string_generator())  
                     
                     
-            else:                                                 
-              #  response = HttpResponse(homemade_string_generator())  
-                response = HttpResponse(json_homemade_string_generator())  
-                    
-                    
+            else:
+                response = HttpResponse(homemade_string_generator())  
                 
-                             
-
-
     except Exception as e:
         logging.exception( str(e) )
         response = HttpResponse("0")
@@ -171,6 +173,22 @@ def text_questions(request):
                 tq.geofence.lon, tq.geofence.radius, tq.text_question_info.question ) )
 
             return "\n".join(tq_list)
+
+    def json_string_generator():
+        json_tq_list = list();
+     
+        t_questions = TextQuestion.objects.all()
+        for tq in t_questions:
+            if tq.geofence == None:
+                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
+            else:
+                geofenceDict = model_to_dict(tq.geofence, fields=[field.name for field in tq.geofence._meta.fields])
+                
+            tq_dict = {'id': tq.id, 'geofence': geofenceDict , 'text_question_info': model_to_dict(tq.text_question_info, fields=[field.name for field in tq.text_question_info._meta.fields])}
+                
+            json_tq_list.append(tq_dict)
+        
+        return json.dumps(json_tq_list, cls=DecimalEncoder)
 
     try:
         if request.method == 'GET':
@@ -197,6 +215,10 @@ def text_questions(request):
                 logging.info("TQ result was saved successfully - %s, %s, %s" % (tq_id, tq_response, tq_username))
 
                 response = HttpResponse("1")
+            elif 'format' in request.GET:
+                if request.GET['format'] == 'json':
+                     response = HttpResponse(json_string_generator());
+            
             else:
                 response = HttpResponse(homemade_string_generator())
 
