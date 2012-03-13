@@ -14,7 +14,7 @@ class BudgetLineAdmin(admin.ModelAdmin):
 
 class BudgetLineInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'number_sessions', 'lines_per_session',
-                    'probabilistic',
+                    'probabilistic', 'currency',
                     'x_label', 'x_units', 'x_max', 'x_min',
                     'y_label', 'y_units', 'y_max', 'y_min',
                     'prob_x',

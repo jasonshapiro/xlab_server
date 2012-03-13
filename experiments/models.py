@@ -3,9 +3,6 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-
-#PATRICK: Add Timer class here
-
 class Timer(models.Model):
     
     title = models.CharField(max_length=128, unique=True)
@@ -54,6 +51,12 @@ class BudgetLineInfo(models.Model):
     
     probabilistic = models.BooleanField(default=False)
     
+    MONETORY_CHOICES = (
+    ('None','-'),
+    ('Dollars','$'),
+    ('Euro',u"\u20AC")
+    )
+    currency = models.CharField(max_length=1, choices=MONETORY_CHOICES)
     x_label = models.CharField(max_length=16, blank=True)
     x_units = models.CharField(max_length=8)
     x_max = models.FloatField()
