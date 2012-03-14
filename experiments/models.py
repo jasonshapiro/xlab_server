@@ -52,11 +52,11 @@ class BudgetLineInfo(models.Model):
     probabilistic = models.BooleanField(default=False)
     
     MONETORY_CHOICES = (
-    ('None','-'),
-    ('Dollars','$'),
-    ('Euro',u"\u20AC")
+    ('-','-'),
+    ('$','$'),
+    (u"\u20AC",u"\u20AC")
     )
-    currency = models.CharField(max_length=1, choices=MONETORY_CHOICES)
+    currency = models.CharField(max_length=1, choices=MONETORY_CHOICES, default = '-')
     x_label = models.CharField(max_length=16, blank=True)
     x_units = models.CharField(max_length=8)
     x_max = models.FloatField()
@@ -80,7 +80,7 @@ class BudgetLineInfo(models.Model):
 class BudgetLine(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True,help_text = "For reminders only. Can be blank")
-    budget_line_info = models.ForeignKey(BudgetLineInfo, default=BudgetLineInfo.objects.all().get(id=1))
+    budget_line_info = models.ForeignKey(BudgetLineInfo)
     timer = models.ForeignKey(Timer, help_text = "Must select always, but irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
                             (0, 'None'),

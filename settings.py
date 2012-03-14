@@ -107,6 +107,6 @@ INSTALLED_APPS = (
     'django_bcrypt',
 
     #Mode choice apps
-    'mcuser',
     'experiments',
+    'mcuser',
 )

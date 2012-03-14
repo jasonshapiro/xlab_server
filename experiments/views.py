@@ -115,7 +115,7 @@ def budget_lines(request):
             # Django's CSRF protection. If you're reading this, fix this code!
             # DV: Apparently a GET needs to get the token, followed by a POST. This could be a serious pain.
             # http://stackoverflow.com/questions/4455845/how-do-i-generate-a-django-csrf-key-for-my-iphone-and-android-apps-that-want-to
-            
+            # piston interact with django model - tasety py (django api framework)
             logging.info("In BL get method")
             
             if 'bl_id' in request.GET:
