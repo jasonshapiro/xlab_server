@@ -51,7 +51,7 @@ class BudgetLineInfo(models.Model):
     
     probabilistic = models.BooleanField(default=False)
     
-    MONETORY_CHOICES = (
+    MONETARY_CHOICES = (
     ('-','-'),
     ('$','$'),
     (u"\u20AC",u"\u20AC")
