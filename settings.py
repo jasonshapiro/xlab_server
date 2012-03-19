@@ -105,7 +105,8 @@ INSTALLED_APPS = (
     'piston',
     'debug_toolbar',
     'django_bcrypt',
-
+    'tastypie',
+    
     #Mode choice apps
     'experiments',
     'mcuser',
