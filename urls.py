@@ -1,9 +1,12 @@
 from django.conf.urls.defaults import *
 
 from xlab_server import env_settings
+from xlab_server.myapi import UserResource
 
 from django.contrib import admin
 admin.autodiscover()
+
+user_resource = UserResource()
 
 urlpatterns = patterns('',
     # Example:
@@ -29,10 +32,10 @@ urlpatterns = patterns('',
 
     #TODO: Should future API be handled through this for user-specific data?
     (r'^api/', include('xlab_server.api.urls')), #contains relics
-
+    (r'^api/', include(user_resource.urls)), #authentication using tasetypie 
     #XLAB
     (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay
-        
+   
 )
 
 if env_settings.ENV_DEBUG:
