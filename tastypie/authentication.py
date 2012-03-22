@@ -89,9 +89,11 @@ class BasicAuthentication(Authentication):
         Should return either ``True`` if allowed, ``False`` if not or an
         ``HttpResponse`` if you need something custom.
         """
+        print "in authorization"
+        
         if not request.META.get('HTTP_AUTHORIZATION'):
             return self._unauthorized()
-
+        
         try:
             (auth_type, data) = request.META['HTTP_AUTHORIZATION'].split()
             if auth_type != 'Basic':
@@ -109,7 +111,8 @@ class BasicAuthentication(Authentication):
             user = self.backend.authenticate(username=bits[0], password=bits[1])
         else:
             user = authenticate(username=bits[0], password=bits[1])
-
+     
+        print user
         if user is None:
             return self._unauthorized()
 
