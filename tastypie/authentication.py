@@ -223,6 +223,8 @@ class DigestAuthentication(Authentication):
         Should return either ``True`` if allowed, ``False`` if not or an
         ``HttpResponse`` if you need something custom.
         """
+        print "inside is_authenthicated"
+        
         if not request.META.get('HTTP_AUTHORIZATION'):
             return self._unauthorized()
 
@@ -233,7 +235,7 @@ class DigestAuthentication(Authentication):
                 return self._unauthorized()
         except:
             return self._unauthorized()
-
+        
         digest_response = python_digest.parse_digest_credentials(request.META['HTTP_AUTHORIZATION'])
 
         # FIXME: Should the nonce be per-user?
@@ -242,15 +244,25 @@ class DigestAuthentication(Authentication):
 
         user = self.get_user(digest_response.username)
         api_key = self.get_key(user)
-
+        print "api_key:"
+        print api_key
+        print "digest response:"
+        print digest_response.response
         if user is False or api_key is False:
             return self._unauthorized()
+
+        print request.method
+        print digest_response.username
+        print self.realm
 
         expected = python_digest.calculate_request_digest(
             request.method,
             python_digest.calculate_partial_digest(digest_response.username, self.realm, api_key),
             digest_response)
-
+        print "digest response:"
+        print digest_response.response
+        print "expceted:"
+        print expected
         if not digest_response.response == expected:
             return self._unauthorized()
 
@@ -276,7 +288,7 @@ class DigestAuthentication(Authentication):
         method of the same name.
         """
         from tastypie.models import ApiKey
-
+        print "inside get_key"
         try:
             key = ApiKey.objects.get(user=user)
         except ApiKey.DoesNotExist:
