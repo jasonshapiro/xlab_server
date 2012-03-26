@@ -147,19 +147,25 @@ class ApiKeyAuthentication(Authentication):
         ``HttpResponse`` if you need something custom.
         """
         from django.contrib.auth.models import User
-
+        print "inside apikey auth"
         username = request.GET.get('username') or request.POST.get('username')
         api_key = request.GET.get('api_key') or request.POST.get('api_key')
 
         if not username or not api_key:
+            print "noo"
             return self._unauthorized()
-
+        
         try:
             user = User.objects.get(username=username)
         except (User.DoesNotExist, User.MultipleObjectsReturned):
+            print "aaaaa"
             return self._unauthorized()
 
         request.user = user
+        print "bbb"
+        if self.get_key(user, api_key):
+            print "api key working"
+        
         return self.get_key(user, api_key)
 
     def get_key(self, user, api_key):
@@ -237,7 +243,7 @@ class DigestAuthentication(Authentication):
             return self._unauthorized()
         
         digest_response = python_digest.parse_digest_credentials(request.META['HTTP_AUTHORIZATION'])
-
+        print request.META['HTTP_AUTHORIZATION']
         # FIXME: Should the nonce be per-user?
         if not python_digest.validate_nonce(digest_response.nonce, getattr(settings, 'SECRET_KEY', '')):
             return self._unauthorized()

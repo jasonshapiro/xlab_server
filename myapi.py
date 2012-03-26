@@ -3,6 +3,7 @@ from tastypie.authentication import BasicAuthentication
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
 from tastypie.authentication import DigestAuthentication
+from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.models import ApiKey
@@ -11,7 +12,7 @@ class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'auth/user'
-        excludes = ['email', 'password', 'is_superuser']
+        excludes = ['email', 'username', 'password', 'is_superuser']
         # Add it here.
         for user in User.objects.all(): 
             try:
@@ -19,8 +20,9 @@ class UserResource(ModelResource):
                 print user 
                 print key
             except ApiKey.DoesNotExist:
-                ApiKey.objects.create(user=user) 
-    
+                print "api key does not exits"
+#                ApiKey.objects.create(user=user) 
+  #      authentication= ApiKeyAuthentication()
         authentication = DigestAuthentication()
         authorization = DjangoAuthorization()
         
