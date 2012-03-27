@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)), #okay
 
     #TODO: Should future API be handled through this for user-specific data?
-    (r'^api/', include('xlab_server.api.urls')), #contains relics
+    #(r'^api/', include('xlab_server.api.urls')), #contains relics
     (r'^api/', include(user_resource.urls)), #authentication using tasetypie 
     #XLAB
     (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay
