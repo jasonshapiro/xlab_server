@@ -7,6 +7,7 @@ from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.models import ApiKey
+from django.forms.models import model_to_dict
 from tastypie import fields
 from experiments.models import *
 
@@ -15,14 +16,20 @@ class BlineResource(ModelResource):
         queryset = BudgetLine.objects.all()
         resource_name = 'bline'        
 
+
+
+
 class UserResource(ModelResource):
     bline = fields.ForeignKey(BlineResource, 'bline')
     
     class Meta:
         queryset = User.objects.all()
+        print 'in meta'
+        print model_to_dict(User, fields=[field.name for field in User._meta.fields]);
         resource_name = 'auth/user'
         excludes = ['email', 'username', 'password', 'is_superuser']
         # Add it here.
+
 #        for user in User.objects.all(): 
 #            try:
 #                key = ApiKey.objects.get(user=user)
@@ -31,7 +38,9 @@ class UserResource(ModelResource):
 #            except ApiKey.DoesNotExist:
 #                print "api key does not exits"
 #                ApiKey.objects.create(user=user) 
-  #      authentication= ApiKeyAuthentication()
+#      authentication= ApiKeyAuthentication()
+
+
         authentication = DigestAuthentication()
         authorization = DjangoAuthorization()
         

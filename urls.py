@@ -4,6 +4,7 @@ from xlab_server import env_settings
 from xlab_server.myapi import UserResource
 from xlab_server.myapi import BlineResource
 from django.contrib import admin
+
 admin.autodiscover()
 
 user_resource = UserResource()
@@ -35,8 +36,13 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)), #okay
 
     #TODO: Should future API be handled through this for user-specific data?
+
     (r'^api/', include('xlab_server.api.urls')), #contains relics
     (r'^api/', include(v1_api.urls)), #authentication using tasetypie 
+
+    #(r'^api/', include('xlab_server.api.urls')), #contains relics
+#authentication using tasetypie 
+
     #XLAB
     (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay
    
