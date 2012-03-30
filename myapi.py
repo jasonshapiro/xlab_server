@@ -7,20 +7,29 @@ from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.models import ApiKey
+from tastypie import fields
+from experiments.models import *
+
+class BlineResource(ModelResource):
+    class Meta:
+        queryset = BudgetLine.objects.all()
+        resource_name = 'bline'        
 
 class UserResource(ModelResource):
+    bline = fields.ForeignKey(BlineResource, 'bline')
+    
     class Meta:
         queryset = User.objects.all()
         resource_name = 'auth/user'
         excludes = ['email', 'username', 'password', 'is_superuser']
         # Add it here.
-        for user in User.objects.all(): 
-            try:
-                key = ApiKey.objects.get(user=user)
-                print user 
-                print key
-            except ApiKey.DoesNotExist:
-                print "api key does not exits"
+#        for user in User.objects.all(): 
+#            try:
+#                key = ApiKey.objects.get(user=user)
+#                print user 
+#                print key
+#            except ApiKey.DoesNotExist:
+#                print "api key does not exits"
 #                ApiKey.objects.create(user=user) 
   #      authentication= ApiKeyAuthentication()
         authentication = DigestAuthentication()

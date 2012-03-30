@@ -1,12 +1,16 @@
 from django.conf.urls.defaults import *
-
+from tastypie.api import Api
 from xlab_server import env_settings
 from xlab_server.myapi import UserResource
-
+from xlab_server.myapi import BlineResource
 from django.contrib import admin
 admin.autodiscover()
 
 user_resource = UserResource()
+
+v1_api = Api(api_name='v1')
+v1_api.register(UserResource())
+v1_api.register(BlineResource())
 
 urlpatterns = patterns('',
     # Example:
@@ -32,7 +36,7 @@ urlpatterns = patterns('',
 
     #TODO: Should future API be handled through this for user-specific data?
     (r'^api/', include('xlab_server.api.urls')), #contains relics
-    (r'^api/', include(user_resource.urls)), #authentication using tasetypie 
+    (r'^api/', include(v1_api.urls)), #authentication using tasetypie 
     #XLAB
     (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay
    
