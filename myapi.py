@@ -20,12 +20,12 @@ class BlineResource(ModelResource):
 
 
 class UserResource(ModelResource):
-    bline = fields.ForeignKey(BlineResource, 'bline')
+#    bline = fields.ForeignKey(BlineResource, 'bline')
     
     class Meta:
         queryset = User.objects.all()
         print 'in meta'
-        print model_to_dict(User, fields=[field.name for field in User._meta.fields]);
+#        print model_to_dict(User, fields=[field.name for field in User._meta.fields]);
         resource_name = 'auth/user'
         excludes = ['email', 'username', 'password', 'is_superuser']
         # Add it here.

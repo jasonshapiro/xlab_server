@@ -9,9 +9,9 @@ admin.autodiscover()
 
 user_resource = UserResource()
 
-v1_api = Api(api_name='v1')
-v1_api.register(UserResource())
-v1_api.register(BlineResource())
+#v1_api = Api(api_name='v1')
+#v1_api.register(UserResource())
+#v1_api.register(BlineResource())
 
 urlpatterns = patterns('',
     # Example:
@@ -38,8 +38,8 @@ urlpatterns = patterns('',
     #TODO: Should future API be handled through this for user-specific data?
 
     (r'^api/', include('xlab_server.api.urls')), #contains relics
-    (r'^api/', include(v1_api.urls)), #authentication using tasetypie 
-
+#    (r'^api/', include(v1_api.urls)), #authentication using tasetypie 
+     (r'^api/', include(user_resource.urls)),
     #(r'^api/', include('xlab_server.api.urls')), #contains relics
 #authentication using tasetypie 
 
