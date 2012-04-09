@@ -1,10 +1,10 @@
-__author__="thejo"
-__date__ ="$Oct 12, 2010 11:58:35 PM$"
+__author__="dvizzini"
+__date__ ="$2012-03-31 14:12:54.046304"
 
 from setuptools import setup,find_packages
 
 setup (
-  name = 'ModeChoice',
+  name = 'XLab - Mobile',
   version = '0.1',
   packages = find_packages(),
 
@@ -13,15 +13,14 @@ setup (
 
   # Fill in these to make your Egg ready for upload to
   # PyPI
-  author = 'thejo',
-  author_email = 'thejo@berkeley.edu',
+  author = 'dvizzini',
+  author_email = 'dvizzini@gmail.com',
 
   summary = 'Mode Choice @ Berkeley',
   url = '',
   license = '',
-  long_description= 'Application for the Mode Choice research project at the Systems Engineering department at UC Berkeley',
+  long_description= 'Application for the XLab - Mobile research project at UC Berkeley',
 
   # could also include long_description, download_url, classifiers, etc.
-
   
 )

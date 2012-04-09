@@ -28,7 +28,7 @@ class AnonymousAuthHandler(AnonymousBaseHandler):
     """
     Accept username and password and check if they are valid.
     """
-    allowed_methods = ['post']
+    allowed_methods = ('POST',)
 
     @transaction.commit_manually
     def create(self, request):

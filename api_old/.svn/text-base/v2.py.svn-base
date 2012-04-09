@@ -20,7 +20,9 @@ from piston.handler import AnonymousBaseHandler
 
 from api.exceptions import *
 from mcuser.models import *
-from xlab_server.env_settings import *
+from modechoice.env_settings import *
+from slicer.models import CachedTrip
+from traces.models import *
 
 API_VERSION = 2
 
@@ -28,7 +30,7 @@ class AnonymousAuthHandler(AnonymousBaseHandler):
     """
     Accept username and password and check if they are valid.
     """
-    allowed_methods = ['post']
+    allowed_methods = ('POST',)
 
     @transaction.commit_manually
     def create(self, request):
@@ -76,30 +78,30 @@ class AnonymousAuthHandler(AnonymousBaseHandler):
             try:
                 user_meta_data = UserMetaData.objects.get(user=u)
 
-                logging.debug("%s [username: %s] [active UDID: %s] [current UDID: %s]" %
+		logging.debug("%s [username: %s] [active UDID: %s] [current UDID: %s]" %
                     (r_id, u.username, user_meta_data.phone_identifier, identifier))
-#                if user_meta_data.phone_identifier != identifier:
-#                    #The user is logging in on a different phone
-#                    if 'change_phone' in attrs:
-#                        inactive_phone = UserInactivePhone(user=u.id,
-#                                            phone_identifier=user_meta_data.phone_identifier,
-#                                            phone_platform=user_meta_data.phone_platform,
-#                                            api_version=api_version)
-#                        inactive_phone.save()
-#
-#                        user_meta_data.phone_identifier = identifier
-#                        user_meta_data.phone_platform = platform
-#                        user_meta_data.api_version = api_version
-#                        user_meta_data.save()
-#                    else:
-#                        raise NewPhoneException("Your account is associated with a different phone." +
-#                            " Would you like to associate it with this phone instead?")
-#                else:
-                #This is just a routine login. The user had probably killed / upgraded the application.
-                logging.debug("%s Routine login by [username: %s] [identifier: %s]" % (r_id, u.username, identifier))
-                user_meta_data.api_version = api_version
-                user_meta_data.last_login = datetime.datetime.now()
-                user_meta_data.save()
+                if user_meta_data.phone_identifier != identifier:
+                    #The user is logging in on a different phone
+                    if 'change_phone' in attrs:
+                        inactive_phone = UserInactivePhone(user=u.id,
+                                            phone_identifier=user_meta_data.phone_identifier,
+                                            phone_platform=user_meta_data.phone_platform,
+                                            api_version=api_version)
+                        inactive_phone.save()
+
+                        user_meta_data.phone_identifier = identifier
+                        user_meta_data.phone_platform = platform
+                        user_meta_data.api_version = api_version
+                        user_meta_data.save()
+                    else:
+                        raise NewPhoneException("Your account is associated with a different phone." +
+                            " Would you like to associate it with this phone instead?")
+                else:
+                    #This is just a routine login. The user had probably killed / upgraded the application.
+		    logging.debug("%s Routine login by [username: %s] [identifier: %s]" % (r_id, u.username, identifier))
+                    user_meta_data.api_version = api_version
+                    user_meta_data.last_login = datetime.datetime.now()
+                    user_meta_data.save()
             except UserMetaData.DoesNotExist:
                 #The user is logging in for the first time.
                 logging.debug("%s First login by [username: %s] [identifier: %s]" % (r_id, u.username, identifier))
