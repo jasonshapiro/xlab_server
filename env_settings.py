@@ -13,31 +13,26 @@ DB_PASSWORD = ''
 DB_HOST = ''
 DB_PORT = '5432'
 
-AUTHENTICATION_BACKENDS = (
-    'xlab_server.backends.CaseInsensitiveModelBackend',
-)
-
 #For django-debug-toolbar
 #INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
-MODECHOICE_BASE = os.path.abspath(os.path.dirname(__file__))
+DIR_BASE = os.path.abspath(os.path.dirname(__file__))
 
 # Find the install directory and add it to PYTHONPATH
-lib_path = MODECHOICE_BASE + '/lib'
+lib_path = DIR_BASE + '/lib'
 if lib_path not in sys.path:
     sys.path.append(lib_path)
 
 # Location of static media files
-MC_MEDIA_FILES = MODECHOICE_BASE + '/static'
+MC_MEDIA_FILES = DIR_BASE + '/static'
+
 
 API_SECRET_KEY = 'fswehw7et912ur2rf7#Y@^nfhfbqwme34f&HB&T24gvdkk'
 
-#LOG_FILE = '/var/log/apps/modechoice/modechoice.log'
-#LOG_FILE = '/home/traveler/logs/web-env-xlab/xlab.log'
-LOG_FILE = os.path.abspath(os.path.dirname(__file__)) + '/../logs/xlab.log'
+LOG_FILE = DIR_BASE + '/../log/django/xlab.log'
 
 logging.basicConfig(
     level = logging.DEBUG,
@@ -46,7 +41,7 @@ logging.basicConfig(
 )
 
 # Doc root for static files
-STATIC_DOC_ROOT = MODECHOICE_BASE + '/static'
+STATIC_DOC_ROOT = DIR_BASE + '/static'
 
 # Default sender e-mail ID
 SENDER_EMAIL_ID = '"XLab-M Server Admin" <xtech@haas.berkeley.edu>'

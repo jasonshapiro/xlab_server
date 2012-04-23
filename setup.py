@@ -16,7 +16,7 @@ setup (
   author = 'dvizzini',
   author_email = 'dvizzini@gmail.com',
 
-  summary = 'Mode Choice @ Berkeley',
+  summary = 'XLab - Mobile @ Berkeley',
   url = '',
   license = '',
   long_description= 'Application for the XLab - Mobile research project at UC Berkeley',

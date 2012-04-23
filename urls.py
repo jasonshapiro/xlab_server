@@ -1,19 +1,17 @@
 from django.conf.urls.defaults import *
 from tastypie.api import Api
 from xlab_server import env_settings
-#from xlab_server.experiments.api import UserResource
-from xlab_server.experiments.api import BudgetLineResource
+from xlab_server.experiments.api.resources import BudgetLineResource
+from xlab_server.experiments.api.resources import TextQuestionResource
 from django.contrib import admin
 
 admin.autodiscover()
 
-#v1_api = Api(api_name='v1')
-#v1_api.register(UserResource())
-#v1_api.register(BlineResource())
+v1_api = Api(api_name='v1')
+v1_api.register(BudgetLineResource())
+v1_api.register(TextQuestionResource())
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^modechoice/', include('modechoice.foo.urls')),
 
     (r'^$', 'mcuser.views.index'), #update for xlab (see TODO)
     (r'^home/$', 'mcuser.views.index'),  #update for xlab (see TODO in mcuser.views.index)
@@ -33,11 +31,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)), #okay
 
-    (r'^api/', include('xlab_server.api.urls')), #contains relics
-    #(r'^api/', include(v1_api.urls)), #authentication using tasetypie
-    #(r'^v3/', include(user_resource.urls)),
-    #(r'^api/', include('xlab_server.api.urls')), #contains relics
-#authentication using tasetypie 
+    (r'^api/', include(v1_api.urls)),
 
     #XLAB
     (r'^experiments/', include('xlab_server.experiments.urls')), #better be okay

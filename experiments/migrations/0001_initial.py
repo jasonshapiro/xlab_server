@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('experiments_timer', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
-            ('experimentType', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
+            ('timer_type', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
             ('min_interval', self.gf('django.db.models.fields.IntegerField')()),
             ('max_interval', self.gf('django.db.models.fields.IntegerField')()),
             ('boolMonday', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -48,6 +48,7 @@ class Migration(SchemaMigration):
             ('number_sessions', self.gf('django.db.models.fields.IntegerField')()),
             ('lines_per_session', self.gf('django.db.models.fields.IntegerField')()),
             ('probabilistic', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('currency', self.gf('django.db.models.fields.CharField')(default='-', max_length=4)),
             ('x_label', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
             ('x_units', self.gf('django.db.models.fields.CharField')(max_length=8)),
             ('x_max', self.gf('django.db.models.fields.FloatField')()),
@@ -71,19 +72,11 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('experiments', ['BudgetLine'])
 
-        # Adding M2M table for field user on 'BudgetLine'
-        db.create_table('experiments_budgetline_user', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('budgetline', models.ForeignKey(orm['experiments.budgetline'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
-        ))
-        db.create_unique('experiments_budgetline_user', ['budgetline_id', 'user_id'])
-
         # Adding model 'BudgetLineResult'
         db.create_table('experiments_budgetlineresult', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('budget_line_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.BudgetLine'])),
+            ('budget_line_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.BudgetLine'], null=True)),
             ('session', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('line', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('x', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
@@ -114,14 +107,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('experiments', ['TextQuestion'])
 
-        # Adding M2M table for field user on 'TextQuestion'
-        db.create_table('experiments_textquestion_user', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('textquestion', models.ForeignKey(orm['experiments.textquestion'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
-        ))
-        db.create_unique('experiments_textquestion_user', ['textquestion_id', 'user_id'])
-
         # Adding model 'TextQuestionResult'
         db.create_table('experiments_textquestionresult', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -149,9 +134,6 @@ class Migration(SchemaMigration):
         # Deleting model 'BudgetLine'
         db.delete_table('experiments_budgetline')
 
-        # Removing M2M table for field user on 'BudgetLine'
-        db.delete_table('experiments_budgetline_user')
-
         # Deleting model 'BudgetLineResult'
         db.delete_table('experiments_budgetlineresult')
 
@@ -160,9 +142,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TextQuestion'
         db.delete_table('experiments_textquestion')
-
-        # Removing M2M table for field user on 'TextQuestion'
-        db.delete_table('experiments_textquestion_user')
 
         # Deleting model 'TextQuestionResult'
         db.delete_table('experiments_textquestionresult')
@@ -211,12 +190,12 @@ class Migration(SchemaMigration):
             'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']"}),
-            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'user': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
         },
         'experiments.budgetlineinfo': {
             'Meta': {'object_name': 'BudgetLineInfo'},
             'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'currency': ('django.db.models.fields.CharField', [], {'default': "'-'", 'max_length': '4'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lines_per_session': ('django.db.models.fields.IntegerField', [], {}),
             'number_sessions': ('django.db.models.fields.IntegerField', [], {}),
@@ -234,7 +213,7 @@ class Migration(SchemaMigration):
         },
         'experiments.budgetlineresult': {
             'Meta': {'object_name': 'BudgetLineResult'},
-            'budget_line_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.BudgetLine']"}),
+            'budget_line_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.BudgetLine']", 'null': 'True'}),
             'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lat': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '6'}),
@@ -263,8 +242,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'TextQuestion'},
             'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']"}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"}),
-            'user': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'symmetrical': 'False'})
+            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"})
         },
         'experiments.textquestioninfo': {
             'Meta': {'object_name': 'TextQuestionInfo'},
@@ -293,12 +271,12 @@ class Migration(SchemaMigration):
             'boolWednesday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'endDate': ('django.db.models.fields.DateField', [], {}),
             'endTime': ('django.db.models.fields.IntegerField', [], {}),
-            'experimentType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'max_interval': ('django.db.models.fields.IntegerField', [], {}),
             'min_interval': ('django.db.models.fields.IntegerField', [], {}),
             'startDate': ('django.db.models.fields.DateField', [], {}),
             'startTime': ('django.db.models.fields.IntegerField', [], {}),
+            'timer_type': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         }
     }

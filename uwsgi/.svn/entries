@@ -1,7 +1,7 @@
-9
+10
 
 dir
-120
+133
 https://earlgrey.repositoryhosting.com/svn/earlgrey_mcr/uwsgi
 https://earlgrey.repositoryhosting.com/svn/earlgrey_mcr
 
@@ -12,7 +12,7 @@ https://earlgrey.repositoryhosting.com/svn/earlgrey_mcr
 justin
 
 
-svn:special svn:externals svn:needs-lock
+
 
 
 
@@ -25,13 +25,6 @@ svn:special svn:externals svn:needs-lock
 
 
 498b8c0d-cda7-4c4d-8679-15aedb801065
-
-
-
-
-
-
-0
 
 uwsgi.ini
 file
@@ -39,7 +32,7 @@ file
 
 
 
-2011-11-05T23:21:40.000000Z
+2012-03-06T02:57:50.618351Z
 13dc2f81aedce0d7e5f03abc311d04f4
 2011-11-05T23:22:57.332072Z
 2

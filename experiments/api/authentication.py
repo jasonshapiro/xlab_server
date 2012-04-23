@@ -1,39 +1,33 @@
+import base64
+import datetime
+import gzip
+import hashlib
+import logging
+import os
+import pytz
+import time
+import traceback
+
+from pytz import UnknownTimeZoneError
+
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
+from django.db import transaction, connection, IntegrityError
 from django.contrib.auth.models import User
-from tastypie.authentication import BasicAuthentication
-from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import ModelResource
-from tastypie.authentication import DigestAuthentication
-from tastypie.authentication import ApiKeyAuthentication
+
 from tastypie.authentication import Authentication
-from tastypie.authorization import Authorization
-from tastypie.models import ApiKey
-from django.forms.models import model_to_dict
-from tastypie import fields
-from experiments.models import *
 
-class UserResource(ModelResource):
-    class Meta:
-        queryset = User.objects.all()
-        excludes = ['email', 'password', 'is_superuser']
-        authentication = DigestAuthentication()
+from env_settings import *
+from experiments.api.exceptions import *
+from mcuser.models import *
 
-
-class BudgetLineResource(ModelResource):
-    user = fields.ForeignKey(UserResource, 'user')
-
-    class Meta:
-        queryset = Entry.objects.all()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
-        authorization = DjangoAuthorization()
-        filtering = {
-            'user': ALL_WITH_RELATIONS,
-            }
+API_VERSION = 1
 
 #In honor of (and largely written by) Thejo Kote. May he live long and prosper.
 class ThejoDigestAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        attrs = self.flatten_dict(request.POST)
+        attrs = request.POST
         r_id = request_id()
 
         try:
