@@ -102,7 +102,6 @@ INSTALLED_APPS = (
     #Third party apps
     'south',
     'django_extensions',
-    'piston',
     'debug_toolbar',
     'django_bcrypt',
     'tastypie',
