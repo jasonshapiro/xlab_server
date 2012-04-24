@@ -2,7 +2,7 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append('/opt/django-projects/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'xlab_server.settings'
 
 import django.core.handlers.wsgi
