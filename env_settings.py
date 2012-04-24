@@ -32,12 +32,10 @@ MC_MEDIA_FILES = DIR_BASE + '/static'
 
 API_SECRET_KEY = 'fswehw7et912ur2rf7#Y@^nfhfbqwme34f&HB&T24gvdkk'
 
-LOG_FILE = DIR_BASE + '/../log/django/xlab.log'
-
 logging.basicConfig(
     level = logging.DEBUG,
     format = '%(asctime)s %(levelname)s %(message)s',
-    filename = LOG_FILE,
+    filename = '/opt/log/django/xlab.log',
 )
 
 # Doc root for static files
