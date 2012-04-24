@@ -1,0 +1,279 @@
+Downloading/unpacking django-tastypie
+  Running setup.py egg_info for package django-tastypie
+    running egg_info
+    writing requirements to pip-egg-info/django_tastypie.egg-info/requires.txt
+    error: pip-egg-info/django_tastypie.egg-info/requires.txt: Permission denied
+    Complete output from command python setup.py egg_info:
+    running egg_info
+
+writing requirements to pip-egg-info/django_tastypie.egg-info/requires.txt
+
+error: pip-egg-info/django_tastypie.egg-info/requires.txt: Permission denied
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1775, in install_files
+    req_to_install.run_egg_info()
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1346, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 1
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:27:26 2012
+Downloading/unpacking tastypie
+  Getting page http://pypi.python.org/simple/tastypie
+  Could not fetch URL http://pypi.python.org/simple/tastypie: HTTP Error 404: Not Found (tastypie does not have any releases)
+  Will skip URL http://pypi.python.org/simple/tastypie when looking for download links for tastypie
+  Getting page http://pypi.python.org/simple/
+  URLs to search for versions for tastypie:
+  Could not find any downloads that satisfy the requirement tastypie
+No distributions at all found for tastypie
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1750, in install_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1029, in find_requirement
+    raise DistributionNotFound('No distributions at all found for %s' % req)
+DistributionNotFound: No distributions at all found for tastypie
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:27:34 2012
+Downloading/unpacking django-tastypie
+  Running setup.py egg_info for package django-tastypie
+    running egg_info
+    writing requirements to pip-egg-info/django_tastypie.egg-info/requires.txt
+    writing pip-egg-info/django_tastypie.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/django_tastypie.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/django_tastypie.egg-info/dependency_links.txt
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/django_tastypie.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    writing manifest file 'pip-egg-info/django_tastypie.egg-info/SOURCES.txt'
+  Source in ./build/django-tastypie has version 0.9.11, which satisfies requirement django-tastypie
+Requirement already satisfied: mimeparse in /usr/local/lib/python2.6/dist-packages (from django-tastypie)
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (python-dateutil 1.4.1 (/usr/lib/pymodules/python2.6), Requirement.parse('python-dateutil>=1.5,<2.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:28:47 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 7))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.4.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:30:25 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 7))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.4.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:31:28 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 7))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.1.6'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:32:24 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 7))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.5.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:33:26 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 7))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.5.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:34:08 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 6))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.5.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:35:38 2012
+Requirement already satisfied: django-bcrypt==0.9.2 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: python-digest==1.7 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 6))
+Requirement already satisfied: django-debug-toolbar==0.9.4 in /usr/local/lib/python2.6/dist-packages (from -r requirements.txt (line 3))
+Requirement already satisfied: simplejson==2.0.9 in /usr/lib/pymodules/python2.6 (from -r requirements.txt (line 10))
+Downloading/unpacking django-tastypie==0.9.11 (from -r requirements.txt (line 5))
+  Running setup.py egg_info for package django-tastypie
+    running egg_info
+    writing requirements to pip-egg-info/django_tastypie.egg-info/requires.txt
+    writing pip-egg-info/django_tastypie.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/django_tastypie.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/django_tastypie.egg-info/dependency_links.txt
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/django_tastypie.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    writing manifest file 'pip-egg-info/django_tastypie.egg-info/SOURCES.txt'
+  Source in ./build/django-tastypie has version 0.9.11, which satisfies requirement django-tastypie==0.9.11 (from -r requirements.txt (line 5))
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (psycopg2 2.0.13 (/usr/lib/python2.6/dist-packages), Requirement.parse('psycopg2==2.4.4'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:37:23 2012
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (simplejson 2.0.9 (/usr/lib/pymodules/python2.6), Requirement.parse('simplejson==2.5.0'))
+------------------------------------------------------------
+/usr/bin/pip run on Mon Apr 23 17:40:08 2012
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 406, in run
+    for req in parse_requirements(filename, finder=finder):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3268, in parse_requirements
+    filename, content = get_file_content(filename, comes_from=comes_from)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3259, in get_file_content
+    f = open(url)
+IOError: [Errno 2] No such file or directory: '-U'

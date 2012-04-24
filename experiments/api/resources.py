@@ -52,7 +52,7 @@ class BudgetLineResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'budget_line'
-        authentication = ThejoDigestAuthentication()
+        #authentication = ThejoDigestAuthentication()
 
 class TextQuestionInfoResource(ModelResource):
     
