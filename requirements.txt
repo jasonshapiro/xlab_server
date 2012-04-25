@@ -9,7 +9,6 @@ south==0.7.3
 mimeparse==0.1.3
 simplejson==2.5.0
 psycopg2==2.4.4 # should enter sudo apt-get build-dep python-psycopg2 beforehand
-boto==2.2.2
 mailgun==0.1
 py-bcrypt==0.2
 pytz==2011h
