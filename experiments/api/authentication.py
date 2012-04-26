@@ -10,9 +10,6 @@ import traceback
 
 from pytz import UnknownTimeZoneError
 
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
-
 from django.db import transaction, connection, IntegrityError
 from django.contrib.auth.models import User
 
