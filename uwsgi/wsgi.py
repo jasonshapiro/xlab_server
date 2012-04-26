@@ -1,9 +1,9 @@
-# wsgi_app.py
+# wsgi.py
 import site
 import os
 import sys
 
-SITE_DIR = os.path.abspath(os.path.dirname(__file__))
+SITE_DIR = '/opt/django-trunk/xlab_server'
 
 site.addsitedir(SITE_DIR) 
 
