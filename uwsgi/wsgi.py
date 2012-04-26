@@ -1,10 +1,12 @@
 # wsgi_app.py
-SITE_DIR = '/opt/django-trunk/xlab_server'
 import site
-site.addsitedir(SITE_DIR) 
-
 import os
 import sys
+
+SITE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+site.addsitedir(SITE_DIR) 
+
 sys.path.append(SITE_DIR)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'xlab_server.settings'
