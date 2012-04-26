@@ -1,4 +1,4 @@
-# wsgi.py
+# wsgi_xlab.py
 import site
 import os
 import sys
