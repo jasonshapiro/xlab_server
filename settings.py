@@ -58,8 +58,7 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-STATIC_URL = '/media/'
-# ADMIN_MEDIA_ROOT = '/home/traveler/web-env/lib/python2.6/site-packages/django/contrib/admin/'
+ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '2wx!!%#^=r8hmonijncq*rxdk#lo7go$c!!d*y6vy)5h5+efhg'
@@ -98,7 +97,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'django.contrib.staticfiles',
 
     #Third party apps
     'south',
