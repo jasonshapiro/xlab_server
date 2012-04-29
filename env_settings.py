@@ -11,7 +11,7 @@ DB_NAME = 'xlab'
 DB_USER = 'xlab'
 DB_PASSWORD = ''
 DB_HOST = ''
-DB_PORT = '5432'
+DB_PORT = ''
 
 #For django-debug-toolbar
 #INTERNAL_IPS = ('127.0.0.1',)
