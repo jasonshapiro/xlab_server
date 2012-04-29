@@ -8,7 +8,7 @@ ENV_DEBUG = True
 
 #Database settings
 DB_NAME = 'xlab'
-DB_USER = 'postgres'
+DB_USER = 'xlab'
 DB_PASSWORD = ''
 DB_HOST = ''
 DB_PORT = '5432'
