@@ -10,47 +10,23 @@ The installation assumes a fresh EC2 instance running Ubuntu 12.04. If you are h
 
 Install required packages
 
-	sudo apt-get install postgresql postgresql-server-dev-all python-virtualenv python2.7-dev git nginx
+	sudo apt-get install postgresql postgresql-server-dev-all python-virtualenv python2.7-dev git nginx acl
 
-Make directory for django
+Make directories
 
-	sudo mkdir /opt/django-trunk
+	sudo mkdir /opt/django-trunk /opt/venvs /opt/log /opt/log/{django,uwsgi,nginx}
 
-Make user ubuntu the owner of this directory
+Make user ubuntu the owner of these directories
 
-	sudo chown -R ubuntu:ubuntu /opt/django-trunk 
+	sudo chown -R ubuntu:ubuntu /opt/*
+
+Create empty log files with the touch command
+
+	touch /opt/log/uwsgi/xlab.log /opt/log/nginx/xlab.log /opt/log/django/xlab.log
 
 Clone git repo (read-only connection is fine)
 
 	git clone git://github.com/dvizzini/xlab_server.git /opt/django-trunk/xlab_server
-
-Make directory for virtualenvs
-
-	sudo mkdir /opt/venvs
-
-Make user ubuntu the owner of this directory
-
-	sudo chown -R ubuntu:ubuntu /opt/venvs
-
-Make directory for logs
-	
-	sudo mkdir /opt/log
-
-Make django directory within /opt/log
-
-	sudo mkdir /opt/log/django
-
-Make django directory within /opt/log
-
-	sudo mkdir /opt/log/django
-
-Make django directory within /opt/log
-
-	sudo mkdir /opt/log/	
-
-Make user ubuntu the owner of this directory
-
-	sudo chown -R ubuntu:ubuntu /opt/log
 
 Create xlab_env
 
@@ -63,6 +39,10 @@ Activate this virtual environment
 Install python packages
 
 	pip install -r /opt/django-trunk/xlab_server/deployment/requirements.txt
+
+Give the www-data user (which runs both uwsgi and nginx tasks) write access to the log files
+
+	setfacl -Rm u:www-data:rx /opt/log
 
 Start postgres command-line utility (psql)
 
@@ -128,6 +108,6 @@ Link this file in sites-available
 
 Copy the Upstart file to the appropriate folder
 
-	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/uwsgi.conf
+	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
 
 # sudo start uwsgi
