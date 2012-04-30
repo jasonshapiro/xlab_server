@@ -13,6 +13,76 @@ def prod():
     env.hosts = ['milesense.com']
     env.key_filename = [KEY_LOCATION,]
 
+# install required packages
+# sudo apt-get install postgresql postgresql-server-dev-all python-virtualenv python2.7-dev git
+
+# make directory for django
+# sudo mkdir /opt/django-trunk
+
+# make user ubuntu the owner of this directory
+# sudo chown -R ubuntu:ubuntu /opt/django-trunk 
+
+# clone git repo (read-only connection is fine)
+# git clone git://github.com/dvizzini/xlab_server.git /opt/django-trunk/xlab_server
+
+# make directory for virtualenvs
+# sudo mkdir /opt/venvs
+
+# make user ubuntu the owner of this directory
+# sudo chown -R ubuntu:ubuntu /opt/venvs
+
+# make directory for logs
+# sudo mkdir /opt/log
+
+# make django directory with /opt/log
+# sudo mkdir /opt/log/django
+
+# make user ubuntu the owner of this directory
+# sudo chown -R ubuntu:ubuntu /opt/log
+
+# create xlab_env
+# virtualenv /opt/venvs/xlab_env
+
+# activate this virtual environment
+# source /opt/venvs/xlab_env/bin/activate
+
+# install python packages
+# pip install -r /opt/django-trunk/xlab_server/requirements.txt
+
+# start postgres command-line utility (psql)
+# sudo su postgres -c psql template1
+
+# in psql, create 'xlab' user and give it password 'xlab'
+# postgres=# CREATE USER xlab WITH PASSWORD 'xlab';
+
+# in psql, create xlab database 
+# postgres=# CREATE DATABASE xlab;
+
+# in psql, grant privlidges to user xlab
+# postgres=# GRANT ALL PRIVILEGES ON DATABASE xlab to xlab;
+
+# exit psql
+# postgres=# \q
+
+# open pg_hba.conf
+# sudo vim /etc/postgresql/9.1/main/pg_hba.conf
+
+# hit "insert" or the "i" key, and then add the following line to the bottom of the file
+# local   xlab            xlab                                    md5
+
+# hit "escape" and then save the file
+# :w
+
+# exit vim
+# :q
+
+# restart the postgres server
+# sudo service postgresql restart
+
+# cd into django root
+# cd /opt/django-trunk/xlab_server
+
+
 # sudo cp /opt/django-trunk/xlab_server/uwsgi/uwsgi.conf /etc/init/uwsgi.conf
 # sudo start uwsgi
 # sudo cp /opt/django-trunk/xlab_server/nginx/xlab.conf /etc/nginx/sites-available
