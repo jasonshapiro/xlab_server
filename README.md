@@ -22,7 +22,7 @@ Make user ubuntu the owner of these directories
 
 Create empty log files with the touch command
 
-	touch /opt/log/uwsgi/xlab.log /opt/log/nginx/xlab.log /opt/log/django/xlab.log
+	touch /opt/log/uwsgi/xlab.log /opt/log/django/xlab.log /opt/log/nginx/error.log /opt/log/nginx/access.log
 
 Clone git repo (read-only connection is fine)
 
@@ -110,4 +110,5 @@ Copy the Upstart file to the appropriate folder
 
 	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
 
-# sudo start uwsgi
+Start 
+sudo start uwsgi
