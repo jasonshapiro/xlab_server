@@ -80,10 +80,6 @@ Exit vim
 
 	:q
 
-Note, if the above does not work, you may need to set top permission to the following
-
-	local   all            all                                    trust
-
 Restart the postgres server
 
 	sudo service postgresql restart
@@ -112,7 +108,7 @@ Copy the Upstart file to the appropriate folder
 
 Start uwsgi
 
-	sudo start uwsgi
+	sudo start xlab_uwsgi
 
 Start nginx
 
@@ -120,7 +116,7 @@ Start nginx
 	
 To restart you can either enter the following
 
-	sudo restart uwsgi
+	sudo restart xlab_uwsgi
 	sudo /etc/init.d/nginx restart
 
 or, **preferably** 	reboot
