@@ -42,7 +42,7 @@ Install python packages
 
 Give the www-data user (which runs both uwsgi and nginx tasks) write access to the log files
 
-	setfacl -Rm u:www-data:rx /opt/log
+	setfacl -Rm u:www-data:rwx /opt/log
 
 Start postgres command-line utility (psql)
 
@@ -110,5 +110,19 @@ Copy the Upstart file to the appropriate folder
 
 	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
 
-Start 
-sudo start uwsgi
+Start uwsgi
+
+	sudo start uwsgi
+
+Start nginx
+
+	sudo /etc/init.d/nginx start
+	
+To restart you can either enter the following
+
+	sudo restart uwsgi
+	sudo /etc/init.d/nginx restart
+
+or, **preferably** 	reboot
+
+	sudo reboot
