@@ -92,6 +92,11 @@ Sync the database (make sure the virtualenv is still activated)
 
 	./manage.py syncdb
 
+Migrate apps managed under South (make sure the virtualenv is still activated)
+
+	./manage.py migrate experiments
+	./manage.py migrate tastypie
+
 When prompted, created a user called xlab. Give it password xlab and email xtech@haas.berkeley.edu
 
 Copy nginx config file
@@ -119,6 +124,6 @@ To restart you can either enter the following
 	sudo restart xlab_uwsgi
 	sudo /etc/init.d/nginx restart
 
-or, **preferably** 	reboot
+or, **preferably**,	reboot
 
 	sudo reboot
