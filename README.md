@@ -124,7 +124,7 @@ To restart you can either enter the following
 	sudo restart xlab_uwsgi
 	sudo /etc/init.d/nginx restart
 
-	or, **preferably**,	reboot
+	or, preferably, reboot
 
 	sudo reboot
 	
@@ -141,7 +141,7 @@ Then, **from your local machine**, add the changes to git
 	
 **From your local machine**, commit the changes
 
-	git commit -m "*your message here*"
+	git commit -m "your commit message"
 	
 **From your local machine**, push the changes
 
@@ -153,14 +153,13 @@ Then, **from your local machine**, add the changes to git
 	
 If you are changing an app mananged by South, migrate the changes on the server **on the server**
 
-	./manage.py migrate *app_name*
+	./manage.py migrate app_name
 	
 Restart the server
 
 	sudo restart xlab_uwsgi
 	sudo /etc/init.d/nginx restart
 
-	or, **preferably**,	reboot
+	or, preferably,	reboot
 
 	sudo reboot
-	
