@@ -108,7 +108,7 @@ class BudgetLine(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True, help_text = "For reminders only. Can be blank")
     budget_line_info = models.ForeignKey(BudgetLineInfo)
-    timer = models.ForeignKey(Timer, null=True, help_text = "Irrelevant if timer status is None.")
+    timer = models.ForeignKey(Timer, blank=True, null=True, help_text = "Irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
                             (0, 'None'),
                             (1, 'Reminder Only'),

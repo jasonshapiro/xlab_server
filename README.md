@@ -133,7 +133,7 @@ Pushing Changes
 
 If you are changing an app mananged by South, be sure to **locally** create the schemamigration
 
-	./manage.py schemamigration *app_name* --auto
+	./manage.py schemamigration app_name --auto
 
 Then, **from your local machine**, add the changes to git
 
