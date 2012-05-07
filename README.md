@@ -109,7 +109,7 @@ Link this file in sites-available
 
 Copy the Upstart file to the appropriate folder
 
-	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
+	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /**, /init/xlab_uwsgi.conf
 
 Start uwsgi
 
@@ -124,6 +124,43 @@ To restart you can either enter the following
 	sudo restart xlab_uwsgi
 	sudo /etc/init.d/nginx restart
 
-or, **preferably**,	reboot
+	or, **preferably**,	reboot
 
 	sudo reboot
+	
+Pushing Changes
+---------------
+
+If you are changing an app mananged by South, be sure to **locally** create the schemamigration
+
+	./manage.py schemamigration *app_name* --auto
+
+Then, **from your local machine**, add the changes to git
+
+	git add .
+	
+**From your local machine**, commit the changes
+
+	git commit -m "*your message here*"
+	
+**From your local machine**, push the changes
+
+	git push
+	
+**On the server**, pull the changes
+
+	git pull
+	
+If you are changing an app mananged by South, migrate the changes on the server **on the server**
+
+	./manage.py migrate *app_name*
+	
+Restart the server
+
+	sudo restart xlab_uwsgi
+	sudo /etc/init.d/nginx restart
+
+	or, **preferably**,	reboot
+
+	sudo reboot
+	
