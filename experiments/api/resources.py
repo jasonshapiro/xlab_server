@@ -43,7 +43,7 @@ class BudgetLineInfoResource(ModelResource):
 class BudgetLineResource(ModelResource):
     
     info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
-    timer = fields.ToOneField('experiments.api.resources.TimerResource', 'timer', full=True)
+    timer = fields.ToOneField('experiments.api.resources.TimerResource', 'timer', full=True, null=True)
     geofence = fields.ToOneField('experiments.api.resources.GeofenseResource', 'geofence', full=True, null=True)
 
     class Meta:
@@ -52,7 +52,7 @@ class BudgetLineResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'budget_line'
-        #authentication = ThejoDigestAuthentication()
+        authentication = DigestAuthentication()
 
 class TextQuestionInfoResource(ModelResource):
     

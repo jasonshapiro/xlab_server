@@ -10,6 +10,8 @@ import traceback
 
 from pytz import UnknownTimeZoneError
 
+from tastypie.api import Api
+
 from django.db import transaction, connection, IntegrityError
 from django.contrib.auth.models import User
 
@@ -112,10 +114,6 @@ class ThejoDigestAuthentication(Authentication):
             transaction.rollback()
             logging.info("%s [username: %s] [error: %s]" % (r_id, username, str(e)))
             resp = {'code' : 0, 'message' : "The username is not valid."}
-        except NewPhoneException as np:
-            transaction.rollback()
-            logging.info("%s [username: %s] [error: %s]" % (r_id, username, str(np)))
-            resp = {'code' : 2, 'message' : str(np)}
         except Exception as ex:
             transaction.rollback()
             logging.exception( str(ex) )
