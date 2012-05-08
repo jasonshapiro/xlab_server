@@ -109,7 +109,7 @@ Link this file in sites-available
 
 Copy the Upstart file to the appropriate folder
 
-	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /**, /init/xlab_uwsgi.conf
+	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
 
 Start uwsgi
 
@@ -118,6 +118,8 @@ Start uwsgi
 Start nginx
 
 	sudo /etc/init.d/nginx start
+	
+Give the server a minute or two to get started, then you should be able to see it working from your browser.
 	
 To restart you can either enter the following
 
