@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 
 from tastypie import fields
 from tastypie.resources import ModelResource
+from tastypie.authentication import DigestAuthenticatio
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
 
