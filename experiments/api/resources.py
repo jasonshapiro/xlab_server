@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 
 from tastypie import fields
 from tastypie.resources import ModelResource
-from tastypie.authentication import DigestAuthentication
+from tastypie.authentication import BasicAuthentication
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
 
@@ -53,7 +53,7 @@ class BudgetLineResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'budget_line'
-        authentication = DigestAuthentication()
+        authentication = BasicAuthentication()
 
 class TextQuestionInfoResource(ModelResource):
     
