@@ -12,7 +12,7 @@ from pytz import UnknownTimeZoneError
 
 from tastypie.api import Api
 
-from django.db import transaction, connection, IntegrityError
+from django.db import connection, IntegrityError
 from django.contrib.auth.models import User
 
 from tastypie.authentication import Authentication
@@ -21,10 +21,10 @@ from env_settings import *
 from experiments.api.exceptions import *
 from mcuser.models import *
 
-API_VERSION = 1
+API_VERSION = 2 #so client won't have to change
 
 #In honor of (and largely written by) Thejo Kote. May he live long and prosper.
-class ThejoDigestAuthentication(Authentication):
+class ThejoAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         attrs = request.POST
         r_id = request_id()
@@ -103,26 +103,15 @@ class ThejoDigestAuthentication(Authentication):
             logging.info("%s User logged in [username: %s] [user id: %d]" %
                 (r_id, u.username, u.id))
 
-            # Save details of this API access
-            api_access = ApiAccessEvent(user=u, access_type=ApiAccessEvent.AUTH_EVENT)
-            api_access.save()
+            return true
 
-            resp = {'code' : 1, 'userid' : u.id, 'secret_key': user_meta_data.secret_key,
-                    'email' : u.email, 'first_name' : u.first_name,
-                    'last_name' : u.last_name}
         except User.DoesNotExist as e:
-            transaction.rollback()
             logging.info("%s [username: %s] [error: %s]" % (r_id, username, str(e)))
-            resp = {'code' : 0, 'message' : "The username is not valid."}
+            return false
         except Exception as ex:
-            transaction.rollback()
             logging.exception( str(ex) )
             logging.info("%s [error: %s]" % (r_id, str(ex)))
-            resp = {'code' : 0, 'message' : str(ex)}
-        else:
-            transaction.commit()
-
-        return resp
+            return false
 
     # Optional but recommended
     def get_identifier(self, request):

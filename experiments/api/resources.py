@@ -12,12 +12,17 @@ from tastypie.serializers import Serializer
 from experiments.api.authentication import ThejoDigestAuthentication
 from experiments.models import *
 
+class UserResource(ModelResource):
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'user'
+        
 class TimerResource(ModelResource):
     
     class Meta:
         queryset = Timer.objects.all()
         include_resource_uri = False
-        #authentication = ThejoDigestAuthentication()
+        authentication = ThejoAuthentication()
         
     def dehydrate_startDate(self, bundle):
         return {'year': bundle.data['startDate'].year, 'month': bundle.data['startDate'].month, 'date': bundle.data['startDate'].day}
@@ -31,7 +36,7 @@ class GeofenceResource(ModelResource):
     class Meta:
         queryset = Geofence.objects.all()
         include_resource_uri = False
-        #authentication = ThejoDigestAuthentication()
+        authentication = ThejoAuthentication()
 
 class BudgetLineInfoResource(ModelResource):
     
@@ -39,7 +44,7 @@ class BudgetLineInfoResource(ModelResource):
         queryset = BudgetLineInfo.objects.all()
         excludes = ['created_date']
         include_resource_uri = False
-        #authentication = ThejoDigestAuthentication()
+        authentication = ThejoAuthentication()
 
 class BudgetLineResource(ModelResource):
     
@@ -53,13 +58,14 @@ class BudgetLineResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'budget_line'
-        authentication = BasicAuthentication()
+        authentication = ThejoAuthentication()
 
 class TextQuestionInfoResource(ModelResource):
     
     class Meta:
         queryset = BudgetLineInfo.objects.all()
         include_resource_uri = False
+        authentication = ThejoAuthentication()
 
 class TextQuestionResource(ModelResource):
     #user = fields.ForeignKey(UserResource, 'user')
@@ -69,7 +75,7 @@ class TextQuestionResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'text_question'
-        #authorization = ThejoDigestAuthentication()
+        authentication = ThejoAuthentication()
         #filtering = {
         #    'user': ALL_WITH_RELATIONS,
         #    }
