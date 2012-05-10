@@ -145,13 +145,25 @@ Then, **from your local machine**, add the changes to git
 
 	git commit -m "your commit message"
 	
-**From your local machine**, push the changes
+Push the changes
 
 	git push
 	
-**On the server**, pull the changes
+**On the server**, cd into the xlab_server root
+
+	cd /opt/django-trunk/xlab_server
+	
+Pull the changes from the git
 
 	git pull
+	
+Activate the virtual environment
+
+	source /opt/venvs/xlab_env/bin/activate
+	
+Syncdb for good measure
+
+	./manage.py syncdb
 	
 If you are changing an app mananged by South, migrate the changes on the server **on the server**
 
