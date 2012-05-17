@@ -103,15 +103,15 @@ class ThejoAuthentication(Authentication):
             logging.info("%s User logged in [username: %s] [user id: %d]" %
                 (r_id, u.username, u.id))
 
-            return true
+            return True
 
         except User.DoesNotExist as e:
             logging.info("%s [username: %s] [error: %s]" % (r_id, username, str(e)))
-            return false
+            return False
         except Exception as ex:
             logging.exception( str(ex) )
             logging.info("%s [error: %s]" % (r_id, str(ex)))
-            return false
+            return False
 
     # Optional but recommended
     def get_identifier(self, request):

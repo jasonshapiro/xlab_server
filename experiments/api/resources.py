@@ -9,7 +9,7 @@ from tastypie.authentication import BasicAuthentication
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
 
-from experiments.api.authentication import ThejoDigestAuthentication
+from experiments.api.authentication import ThejoAuthentication
 from experiments.models import *
 
 class UserResource(ModelResource):

@@ -29,12 +29,8 @@ def budget_lines(request):
      
         b_lines = BudgetLine.objects.all()
         for bl in b_lines:
-            if bl.geofence == None:
-                geofenceDict = {'title': '', 'lat': 0, 'lon': 0,'radius': 0}
-            else:
-                geofenceDict = model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields])
                 
-            bl_dict = {'id': bl.id, 'geofence': geofenceDict , 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]), 'timer_status': bl.timer_status}
+            bl_dict = {'id': bl.id, 'geofence': model_to_dict(bl.geofence, fields=[field.name for field in bl.geofence._meta.fields]) if  bl.geofence != None else {}, 'budget_line_info': model_to_dict(bl.budget_line_info, fields=[field.name for field in bl.budget_line_info._meta.fields]), 'timer': model_to_dict(bl.timer, fields=[field.name for field in bl.timer._meta.fields]) if bl.timer != None else {}, 'timer_status': bl.timer_status}
                 
             json_bl_list.append(bl_dict)
         
