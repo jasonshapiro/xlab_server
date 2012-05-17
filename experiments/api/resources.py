@@ -15,6 +15,8 @@ from experiments.models import *
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post']
         resource_name = 'user'
         
 class TimerResource(ModelResource):
