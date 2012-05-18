@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 
 from tastypie import fields
 from tastypie.resources import ModelResource
+from tastypie.authentication import Authentication
 from tastypie.authentication import BasicAuthentication
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
@@ -22,9 +23,12 @@ from experiments.models import *
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post']
         resource_name = 'auth/user'
         excludes = ['email', 'password', 'is_superuser']
-
+        authentication = Authentication()
+        
 class TimerResource(ModelResource):
     
     class Meta:

@@ -124,7 +124,6 @@ Give the server a minute or two to get started, then you should be able to see i
 To restart you can either enter the following
 
 	sudo restart xlab_uwsgi
-	sudo /etc/init.d/nginx restart
 
 	or, preferably, reboot
 

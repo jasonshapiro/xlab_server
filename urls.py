@@ -1,13 +1,13 @@
 from django.conf.urls.defaults import *
 from tastypie.api import Api
 from xlab_server import env_settings
-from xlab_server.experiments.api.resources import BudgetLineResource
-from xlab_server.experiments.api.resources import TextQuestionResource
+from xlab_server.experiments.api.resources import *
 from django.contrib import admin
 
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
+v1_api.register(UserResource())
 v1_api.register(BudgetLineResource())
 v1_api.register(TextQuestionResource())
 
