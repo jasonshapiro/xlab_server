@@ -12,13 +12,19 @@ from tastypie.serializers import Serializer
 from experiments.api.authentication import ThejoAuthentication
 from experiments.models import *
 
+#class UserResource(ModelResource):
+#    class Meta:
+#        queryset = User.objects.all()
+#        list_allowed_methods = ['get', 'post']
+#        detail_allowed_methods = ['get', 'post']
+#        resource_name = 'user'
+        
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
-        resource_name = 'user'
-        
+        resource_name = 'auth/user'
+        excludes = ['email', 'password', 'is_superuser']
+
 class TimerResource(ModelResource):
     
     class Meta:
