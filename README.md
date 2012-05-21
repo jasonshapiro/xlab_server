@@ -6,7 +6,7 @@ The server-side component of the XLab-Mobile research project at UC Berkeley.
 Installation
 ------------
 
-The installation assumes a fresh EC2 instance running Ubuntu 12.04. If you are having sys-admin troubles, it is probably best to restart with a fresh instance.
+The installation assumes a development laptop or a fresh EC2 instance running Ubuntu 12.04. If you are having sys-admin troubles, it is probably best to restart with a fresh instance.
 
 Install required packages
 
@@ -24,7 +24,7 @@ Create empty log files with the touch command
 
 	touch /opt/log/uwsgi/xlab.log /opt/log/django/xlab.log /opt/log/nginx/error.log /opt/log/nginx/access.log
 
-Clone git repo (read-only connection is fine)
+Clone git repo (use read-only connection for server and a read-write connection from your personal repo of a dev machine)
 
 	git clone git://github.com/dvizzini/xlab_server.git /opt/django-trunk/xlab_server
 

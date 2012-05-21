@@ -7,7 +7,7 @@ from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.authentication import Authentication
 from tastypie.authentication import BasicAuthentication
-from tastypie.authorization import Authorization
+from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.serializers import Serializer
 
 from experiments.api.authentication import ThejoAuthentication
@@ -27,14 +27,16 @@ class UserResource(ModelResource):
         detail_allowed_methods = ['get', 'post']
         resource_name = 'auth/user'
         excludes = ['email', 'password', 'is_superuser']
-        authentication = Authentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
         
 class TimerResource(ModelResource):
     
     class Meta:
         queryset = Timer.objects.all()
         include_resource_uri = False
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
         
     def dehydrate_startDate(self, bundle):
         return {'year': bundle.data['startDate'].year, 'month': bundle.data['startDate'].month, 'date': bundle.data['startDate'].day}
@@ -48,7 +50,8 @@ class GeofenceResource(ModelResource):
     class Meta:
         queryset = Geofence.objects.all()
         include_resource_uri = False
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
 
 class BudgetLineInfoResource(ModelResource):
     
@@ -56,7 +59,8 @@ class BudgetLineInfoResource(ModelResource):
         queryset = BudgetLineInfo.objects.all()
         excludes = ['created_date']
         include_resource_uri = False
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
 
 class BudgetLineResource(ModelResource):
     
@@ -67,17 +71,20 @@ class BudgetLineResource(ModelResource):
     class Meta:
         queryset = BudgetLine.objects.all()
         include_resource_uri = False
+        users = fields.ToManyField(UserResource, 'notes', full=True)
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'budget_line'
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
 
 class TextQuestionInfoResource(ModelResource):
     
     class Meta:
         queryset = BudgetLineInfo.objects.all()
         include_resource_uri = False
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
 
 class TextQuestionResource(ModelResource):
     #user = fields.ForeignKey(UserResource, 'user')
@@ -87,7 +94,8 @@ class TextQuestionResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         resource_name = 'text_question'
-        authentication = ThejoAuthentication()
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
         #filtering = {
         #    'user': ALL_WITH_RELATIONS,
         #    }
