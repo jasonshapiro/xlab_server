@@ -104,7 +104,6 @@ class BudgetLineInfo(models.Model):
         return "%s" % (self.title)
         
 class BudgetLine(models.Model):
-#        user = models.ForeignKey(User)
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True, help_text = "For reminders only. Can be blank")
     budget_line_info = models.ForeignKey(BudgetLineInfo)
@@ -115,7 +114,7 @@ class BudgetLine(models.Model):
                             (2, 'Restrictive'),
                             )
     timer_status = models.IntegerField(max_length = 1, verbose_name = "timer status", help_text = "Restrictive timers make a subject wait to complete an experiment segment", choices = TIMER_STATUS_CHOICES)
-    #user = models.ManyToManyField(User, null = True, blank = True, help_text = "Currently a meaningless field.")
+    user = models.ManyToManyField(User, null= True, blank = True, help_text = "Currently a meaningless field.")
 
     def __unicode__(self):
         return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)

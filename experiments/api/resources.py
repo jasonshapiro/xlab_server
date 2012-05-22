@@ -30,6 +30,9 @@ class UserResource(ModelResource):
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
         
+    def dehydrate(self, bundle):
+        return bundle.data['username']
+
 class TimerResource(ModelResource):
     
     class Meta:
@@ -67,6 +70,7 @@ class BudgetLineResource(ModelResource):
     info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
     timer = fields.ToOneField('experiments.api.resources.TimerResource', 'timer', full=True, null=True)
     geofence = fields.ToOneField('experiments.api.resources.GeofenseResource', 'geofence', full=True, null=True)
+    user = fields.ToManyField('experiments.api.resources.UserResource', 'user', full=True, null=True)
 
     class Meta:
         queryset = BudgetLine.objects.all()
@@ -77,6 +81,9 @@ class BudgetLineResource(ModelResource):
         resource_name = 'budget_line'
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
+
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter(user=request.user)
 
 class TextQuestionInfoResource(ModelResource):
     
@@ -96,6 +103,6 @@ class TextQuestionResource(ModelResource):
         resource_name = 'text_question'
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
-        #filtering = {
-        #    'user': ALL_WITH_RELATIONS,
-        #    }
+
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter(user=request.user)
