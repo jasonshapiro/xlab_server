@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>XLab Mobile - {% block title %}{% endblock %}</title>
+		<meta name="description" content="The HTML5 Herald">
+		<meta name="author" content="SitePoint">
+		
+		<link rel="stylesheet" href="/static/web/xlab/css/main.css?v=1.0">
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		{% block extrahead %}{% endblock %}
+		
+		<script type="text/javascript">
+		
+		  {% if not donttrackme %}
+			  var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-24632765-1']);
+			  
+			  {% if user.is_authenticated %}
+	          _gaq.push(['_setCustomVar',
+	                     1,             // This custom var is set to slot #1.  Required parameter.
+	                     'User',   // The name of the custom variable.  Required parameter.
+	                     '{{ user.username }}',      // Sets the value of "User Type" to "Member" or "Visitor" depending on status.  Required parameter.
+	                      2             // Sets the scope to session-level.  Optional parameter.
+	                  ]);
+	          {% endif %}
+	          
+	      
+			  _gaq.push(['_trackPageview']);
+		  {% endif %}
+
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		  
+		</script>
+		
+	<!-- start Mixpanel --><script type="text/javascript">var mpq=[];mpq.push(["init","5abf0215e47bc795ca6a8b5ca2456363"]);(function(){var b,a,e,d,c;b=document.createElement("script");b.type="text/javascript";b.async=true;b.src=(document.location.protocol==="https:"?"https:":"http:")+"//api.mixpanel.com/site_media/js/api/mixpanel.js";a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(b,a);e=function(f){return function(){mpq.push([f].concat(Array.prototype.slice.call(arguments,0)))}};d=["init","track","track_links","track_forms","register","register_once","identify","name_tag","set_config"];for(c=0;c<d.length;c++){mpq[d[c]]=e(d[c])}})();
+	</script><!-- end Mixpanel -->
+	
+	<script type="text/javascript">
+	    {% if user.is_authenticated %}
+	        mpq.name_tag('{{ user.username }}');
+	    {% endif %}
+	</script>
+		
+	</head>
+    <body>
+    
+        <div id="wrapper">
+                    
+            <div id="header">
+            </div>
+            
+            <div id="content" {% if front %} class="front" {% endif %}>
+                {% block content %}{% endblock %}                
+            </div>
+             
+            <div id="side">
+                
+            </div>
+            
+            <div id="footer" class="clear">
+            </div>
+            
+        </div>
+    </body>
+</html>

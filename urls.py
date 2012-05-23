@@ -13,7 +13,8 @@ v1_api.register(TextQuestionResource())
 
 urlpatterns = patterns('',
 
-    (r'^$', 'mcuser.views.index'), #update for xlab (see TODO)
+    (r'^$', 'experiments.views.index'),
+    #(r'^$', 'mcuser.views.index'), #update for xlab (see TODO)   -----  (old splash)
     (r'^home/$', 'mcuser.views.index'),  #update for xlab (see TODO in mcuser.views.index)
     (r'^mcadmin/$', 'mcuser.views.mcadmin'), #update for xlab
 
