@@ -121,7 +121,6 @@ class BudgetLineInfo(ExperimentInfo):
 
 #abstract
 class Experiment(models.Model):
-    id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True, help_text = "For reminders only. Can be blank")
     timer = models.ForeignKey(Timer, blank=True, null=True, help_text = "Irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
@@ -130,11 +129,24 @@ class Experiment(models.Model):
                             (2, 'Restrictive'),
                             )
     timer_status = models.IntegerField(max_length = 1, verbose_name = "timer status", help_text = "Restrictive timers make a subject wait to complete an experiment segment", choices = TIMER_STATUS_CHOICES)
-    user = models.ManyToManyField(User, null= True, blank = True, help_text = "Currently a meaningless field.")
+    users = models.ManyToManyField(User, null= True, blank = True)
 
     class Meta:
         abstract = True
 
+    def usernames(self):
+        return ', '.join([u.username for u in self.users.all()])
+    
+    usernames.short_description = "Users participating in experiment"
+    
+#add new experiments here
+class BudgetLine(Experiment):
+    id = models.IntegerField(primary_key=True, editable=False)
+    info = models.ForeignKey(BudgetLineInfo)
+
+    def __unicode__(self):
+        return "%s - %s at %s on %s" % (self.id, self.info, self.geofence, self.timer)
+    
     def save(self, *args, **kwargs):
         if not self.id:
             maxID = 0
@@ -145,19 +157,23 @@ class Experiment(models.Model):
             self.id = maxID + 1
         super(BudgetLine, self).save(*args, **kwargs)
 
-#add new experiments here
-class BudgetLine(Experiment):
-    budget_line_info = models.ForeignKey(BudgetLineInfo)
-
-    def __unicode__(self):
-        return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
-    
 class TextQuestion(Experiment):
-    text_question_info = models.ForeignKey(TextQuestionInfo)
+    id = models.IntegerField(primary_key=True, editable=False)
+    info = models.ForeignKey(TextQuestionInfo)
 
     def __unicode__(self):
-        return "%s - %s at %s on %s" % (self.id, self.text_question_info, self.geofence, self.timer)
+        return "%s - %s at %s on %s" % (self.id, self.info, self.geofence, self.timer)
     
+    def save(self, *args, **kwargs):
+        if not self.id:
+            maxID = 0
+            for bl in BudgetLine.objects.all():
+                maxID = max(maxID, bl.id)
+            for tq in TextQuestion.objects.all():
+                maxID = max(maxID, tq.id)
+            self.id = maxID + 1
+        super(TextQuestion, self).save(*args, **kwargs)
+
 class BudgetLineResult(models.Model):
     user = models.ForeignKey(User, editable=False)
     budget_line_info = models.ForeignKey(BudgetLine, editable=False, null=True)

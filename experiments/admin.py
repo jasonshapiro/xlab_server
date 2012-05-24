@@ -10,10 +10,10 @@ class GeoFenceAdmin(admin.ModelAdmin):
     list_display = ('id',  'title', 'lat', 'lon', 'radius', 'description', 'created_date')
 
 class BudgetLineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'budget_line_info', 'geofence', 'timer', 'timer_status')
+    list_display = ('id', 'budget_line_info', 'geofence', 'timer', 'timer_status', 'usernames')
 
 class TextQuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'text_question_info', 'geofence', 'timer', 'timer_status')
+    list_display = ('id', 'text_question_info', 'geofence', 'timer', 'timer_status', 'usernames')
 
 class BudgetLineInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'number_sessions', 'lines_per_session',
