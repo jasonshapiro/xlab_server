@@ -171,8 +171,9 @@ If you are changing an app mananged by South, migrate the changes on the server 
 Restart the server
 
 	sudo restart xlab_uwsgi
-	sudo /etc/init.d/nginx restart
+	sudo /etc/init.d/nginx reload
 
-	or, preferably,	reboot
+or, preferably,	reboot
 
 	sudo reboot
+	

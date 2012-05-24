@@ -1,8 +1,8 @@
 server {
 
     listen       80;
-    
-    server_name ec2-23-22-54-187.compute-1.amazonaws.com xmobile.berkeley.edu;
+
+    server_name 127.0.0.1/;
     
     client_max_body_size 10M;
 
@@ -12,9 +12,9 @@ server {
     set $static_file_root "/opt/django-trunk/xlab_server/static/";
     set $admin_media "/opt/venvs/xlab_env/lib/python2.7/site-packages/django/contrib/admin/media/";
 
-    #location = /favicon.ico {
-    #    alias $static_file_root/favicon.ico;
-    #}
+    location = /favicon.ico {
+        alias $static_file_root/favicon.ico;
+    }
 
     location = /robots.txt {
         alias $static_file_root/robots.txt;
@@ -22,9 +22,9 @@ server {
 
     location ^~ /static/ {
         # TODO: The static file caching expires everyday at 8 am.
-        # expires @8h0m;
-        # add_header Cache-Control public;
-        alias /opt/django-trunk/xlab_server/static/;
+        expires @8h0m;
+        add_header Cache-Control public;
+        alias $static_file_root;
     }
 
     location ^~ /media/ {
@@ -37,7 +37,7 @@ server {
     	uwsgi_pass unix:///tmp/uwsgi_xlab.sock;
         include /etc/nginx/uwsgi_params;	
     }
-      
+        
     #error_page  404              /404.html;
 
     # redirect server error pages to the static page /50x.html
