@@ -13,13 +13,6 @@ from tastypie.serializers import Serializer
 from experiments.api.authentication import ThejoAuthentication
 from experiments.models import *
 
-#class UserResource(ModelResource):
-#    class Meta:
-#        queryset = User.objects.all()
-#        list_allowed_methods = ['get', 'post']
-#        detail_allowed_methods = ['get', 'post']
-#        resource_name = 'user'
-        
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -65,15 +58,24 @@ class BudgetLineInfoResource(ModelResource):
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
 
-class BudgetLineResource(ModelResource):
+class TextQuestionInfoResource(ModelResource):
     
-    info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
+    class Meta:
+        queryset = TextQuestionInfo.objects.all()
+        excludes = ['created_date']
+        include_resource_uri = False
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
+
+#abstract
+class ExperimentResource(ModelResource):
+    
     timer = fields.ToOneField('experiments.api.resources.TimerResource', 'timer', full=True, null=True)
     geofence = fields.ToOneField('experiments.api.resources.GeofenseResource', 'geofence', full=True, null=True)
     user = fields.ToManyField('experiments.api.resources.UserResource', 'user', full=True, null=True)
 
     class Meta:
-        queryset = BudgetLine.objects.all()
+        abstract = True
         include_resource_uri = False
         users = fields.ToManyField(UserResource, 'notes', full=True)
         list_allowed_methods = ['get', 'post']
@@ -84,25 +86,17 @@ class BudgetLineResource(ModelResource):
 
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter(user=request.user)
+  
+class BudgetLineResource(ExperimentResource):
+    id = models.IntegerField(primary_key=True, editable=False)
+    budget_line_info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
 
-class TextQuestionInfoResource(ModelResource):
-    
     class Meta:
-        queryset = BudgetLineInfo.objects.all()
-        include_resource_uri = False
-        authentication = BasicAuthentication()
-        authorization = ReadOnlyAuthorization()
+        queryset = BudgetLine.objects.all()
 
-class TextQuestionResource(ModelResource):
-    #user = fields.ForeignKey(UserResource, 'user')
+class TextQuestionResource(ExperimentResource):
+    id = models.IntegerField(primary_key=True, editable=False)
+    text_question_info = fields.ToOneField('experiments.api.resources.TextQuestionInfoResource', 'text_question_info', full=True)
 
     class Meta:
         queryset = TextQuestion.objects.all()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
-        resource_name = 'text_question'
-        authentication = BasicAuthentication()
-        authorization = ReadOnlyAuthorization()
-
-    def apply_authorization_limits(self, request, object_list):
-        return object_list.filter(user=request.user)

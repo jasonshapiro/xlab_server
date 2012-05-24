@@ -61,9 +61,25 @@ class Geofence(models.Model):
     def __unicode__(self):
         return "%s" % (self.title)
 
-class BudgetLineInfo(models.Model):
+#abstract
+class ExperimentInfo(models.Model):
+    title = models.CharField(max_length=128, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
     
-    title = models.CharField(max_length=128)
+    class Meta:
+        abstract = True
+
+class TextQuestionInfo(ExperimentInfo):
+    question = models.CharField(max_length=128)
+    
+    def __unicode__(self):
+        return "%s" % (self.question)
+    
+    class Meta:
+        verbose_name_plural = "text question info"
+    
+class BudgetLineInfo(ExperimentInfo):
+    
     number_sessions = models.IntegerField(help_text="Any integer greater than 0. TimerStatic not supported if greater than 1.")    
     lines_per_session = models.IntegerField()
     
@@ -95,18 +111,18 @@ class BudgetLineInfo(models.Model):
     
     prob_x = models.DecimalField(max_digits=7,decimal_places=6,default=0.5, help_text="pertains to probabilistic experiments only")
 
-    created_date = models.DateTimeField(auto_now_add=True)
-
     class Meta:
         verbose_name_plural = "Budget line info"
 
     def __unicode__(self):
         return "%s" % (self.title)
         
-class BudgetLine(models.Model):
+#polymorphism would be really nice here, but it's a pain to implement, especially with Tastypie: https://docs.djangoproject.com/en/dev/ref/contrib/contenttypes/#generic-relations
+
+#abstract
+class Experiment(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     geofence = models.ForeignKey(Geofence, blank=True, null=True, help_text = "For reminders only. Can be blank")
-    budget_line_info = models.ForeignKey(BudgetLineInfo)
     timer = models.ForeignKey(Timer, blank=True, null=True, help_text = "Irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
                             (0, 'None'),
@@ -116,9 +132,9 @@ class BudgetLine(models.Model):
     timer_status = models.IntegerField(max_length = 1, verbose_name = "timer status", help_text = "Restrictive timers make a subject wait to complete an experiment segment", choices = TIMER_STATUS_CHOICES)
     user = models.ManyToManyField(User, null= True, blank = True, help_text = "Currently a meaningless field.")
 
-    def __unicode__(self):
-        return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
-    
+    class Meta:
+        abstract = True
+
     def save(self, *args, **kwargs):
         if not self.id:
             maxID = 0
@@ -129,6 +145,19 @@ class BudgetLine(models.Model):
             self.id = maxID + 1
         super(BudgetLine, self).save(*args, **kwargs)
 
+#add new experiments here
+class BudgetLine(Experiment):
+    budget_line_info = models.ForeignKey(BudgetLineInfo)
+
+    def __unicode__(self):
+        return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
+    
+class TextQuestion(Experiment):
+    text_question_info = models.ForeignKey(TextQuestionInfo)
+
+    def __unicode__(self):
+        return "%s - %s at %s on %s" % (self.id, self.text_question_info, self.geofence, self.timer)
+    
 class BudgetLineResult(models.Model):
     user = models.ForeignKey(User, editable=False)
     budget_line_info = models.ForeignKey(BudgetLine, editable=False, null=True)
@@ -147,35 +176,6 @@ class BudgetLineResult(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.user, self.budget_line_info)
     
-class TextQuestionInfo(models.Model):
-    question = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return "%s" % (self.question)
-    
-    class Meta:
-        verbose_name_plural = "text question info"
-    
-class TextQuestion (models.Model):
-    id = models.IntegerField(primary_key=True,editable=False)
-    geofence = models.ForeignKey(Geofence)
-    text_question_info = models.ForeignKey(TextQuestionInfo)
-    #user = models.ManyToManyField(User)
-    
-    def __unicode__(self):
-        return "%s - %s at %s" % (self.id, self.text_question_info, self.geofence)
-    
-    def save(self, *args, **kwargs):
-        if not self.id:
-            maxID = 0
-            for bl in BudgetLine.objects.all():
-                maxID = max(maxID, bl.id)
-            for tq in TextQuestion.objects.all():
-                maxID = max(maxID, tq.id)
-            self.id = maxID + 1
-        super(TextQuestion, self).save(*args, **kwargs)
-
 class TextQuestionResult(models.Model):
     user = models.ForeignKey(User, editable=False)
     text_question_info = models.ForeignKey(TextQuestion, editable=False)
