@@ -1,19 +1,20 @@
 import simplejson as json
 
+from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 from tastypie import fields
-from tastypie.resources import ModelResource
-from tastypie.authentication import Authentication
+from tastypie.resources import ModelResource, ALL
 from tastypie.authentication import BasicAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
+from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
 
-from experiments.api.authentication import ThejoAuthentication
 from experiments.models import *
 
 class UserResource(ModelResource):
+    
     class Meta:
         queryset = User.objects.all()
         list_allowed_methods = ['get', 'post']
@@ -23,9 +24,6 @@ class UserResource(ModelResource):
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
         
-    def dehydrate(self, bundle):
-        return bundle.data['username']
-
 class TimerResource(ModelResource):
     
     class Meta:
@@ -85,7 +83,6 @@ class BudgetLineResource(ExperimentResource):
         queryset = BudgetLine.objects.all()
         resource_name = 'budget_line'
         include_resource_uri = False
-        users = fields.ToManyField(UserResource, 'notes', full=True)
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         authentication = BasicAuthentication()
@@ -102,7 +99,6 @@ class TextQuestionResource(ExperimentResource):
         queryset = TextQuestion.objects.all()
         resource_name = 'text_question'
         include_resource_uri = False
-        users = fields.ToManyField(UserResource, 'notes', full=True)
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post']
         authentication = BasicAuthentication()
@@ -110,3 +106,16 @@ class TextQuestionResource(ExperimentResource):
 
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter(users=request.user)
+
+class BudgetLineResultResource(ModelResource):
+    
+    budget_line = fields.ToOneField(BudgetLineResource, 'budget_line')
+    user = fields.ToOneField(UserResource, 'user')
+    
+    class Meta:
+        queryset = BudgetLineResult.objects.all()
+        resource_name = 'budget_line_result'
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post']
+        authentication = BasicAuthentication()
+        authorization = Authorization()

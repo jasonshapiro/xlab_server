@@ -4,7 +4,7 @@ import logging
 import itertools
 
 #Boolean value denoting debug status. Used for Django debug status too
-ENV_DEBUG = True
+ENV_DEBUG = False
 
 #Database settings
 DB_NAME = 'xlab'

@@ -24,14 +24,14 @@ class BudgetLineInfoAdmin(admin.ModelAdmin):
                     'created_date')
 
 class BudgetLineResultAdmin(admin.ModelAdmin):
-    list_display = ('user',  'budget_line_info', 'session', 'line', 'x', 'y', 'x_intercept', 'y_intercept', "winner", "line_chosen_boolean",
+    list_display = ('user',  'budget_line', 'session', 'line', 'x', 'y', 'x_intercept', 'y_intercept', "winner", "line_chosen_boolean",
                     'lat', 'lon', 'created_date')
 
 class TextQuestionInfoAdmin(admin.ModelAdmin):
     list_display = ('id',  'question', 'created_date')
 
 class TextQuestionResultAdmin(admin.ModelAdmin):
-    list_display = ('id',  'user', 'text_question_info', 'response', 'created_date')
+    list_display = ('id',  'user', 'text_question', 'response', 'created_date')
 
 admin.site.register(Timer, TimerAdmin)
 admin.site.register(Geofence, GeoFenceAdmin)

@@ -174,31 +174,32 @@ class TextQuestion(Experiment):
             self.id = maxID + 1
         super(TextQuestion, self).save(*args, **kwargs)
 
-class BudgetLineResult(models.Model):
+class ExperimentResult(models.Model):
     user = models.ForeignKey(User, editable=False)
-    budget_line_info = models.ForeignKey(BudgetLine, editable=False, null=True)
+    lat = models.DecimalField(null=True,max_digits=8,decimal_places=6,editable=False)
+    lon = models.DecimalField(null=True,max_digits=9,decimal_places=6,editable=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        abstract = True
+
+class BudgetLineResult(ExperimentResult):
+    budget_line = models.ForeignKey(BudgetLine, editable=False)
     session = models.IntegerField(editable=False, default=-1)
     line = models.IntegerField(editable=False, default=-1)
     x = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     y = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     x_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     y_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
-    lat = models.DecimalField(null=True,max_digits=8,decimal_places=6,editable=False)
-    lon = models.DecimalField(null=True,max_digits=9,decimal_places=6,editable=False)
-    created_date = models.DateTimeField(auto_now_add=True)
     winner = models.CharField(max_length = 1, default="-", editable=False)
     line_chosen_boolean = models.BooleanField(editable=False)
 
     def __unicode__(self):
         return "%s - %s" % (self.user, self.budget_line_info)
     
-class TextQuestionResult(models.Model):
-    user = models.ForeignKey(User, editable=False)
-    text_question_info = models.ForeignKey(TextQuestion, editable=False)
-    lat = models.DecimalField(null=True,max_digits=8,decimal_places=6,editable=False)
-    lon = models.DecimalField(null=True,max_digits=9,decimal_places=6,editable=False)
+class TextQuestionResult(ExperimentResult):
+    text_question = models.ForeignKey(TextQuestion, editable=False)
     response = models.TextField(editable=False)
-    created_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return "%s - %s" % (self.id, self.user)

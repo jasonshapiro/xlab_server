@@ -8,143 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Timer'
-        db.create_table('experiments_timer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
-            ('timer_type', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
-            ('min_interval', self.gf('django.db.models.fields.IntegerField')()),
-            ('max_interval', self.gf('django.db.models.fields.IntegerField')()),
-            ('boolMonday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolTuesday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolWednesday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolThursday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolFriday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolSaturday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('boolSunday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('startDate', self.gf('django.db.models.fields.DateField')()),
-            ('endDate', self.gf('django.db.models.fields.DateField')()),
-            ('startTime', self.gf('django.db.models.fields.IntegerField')()),
-            ('endTime', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('experiments', ['Timer'])
-
-        # Adding model 'Geofence'
-        db.create_table('experiments_geofence', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
-            ('lat', self.gf('django.db.models.fields.FloatField')()),
-            ('lon', self.gf('django.db.models.fields.FloatField')()),
-            ('radius', self.gf('django.db.models.fields.IntegerField')()),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('experiments', ['Geofence'])
-
-        # Adding model 'BudgetLineInfo'
-        db.create_table('experiments_budgetlineinfo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('number_sessions', self.gf('django.db.models.fields.IntegerField')()),
-            ('lines_per_session', self.gf('django.db.models.fields.IntegerField')()),
-            ('probabilistic', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('currency', self.gf('django.db.models.fields.CharField')(default='-', max_length=4)),
-            ('x_label', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
-            ('x_units', self.gf('django.db.models.fields.CharField')(max_length=8)),
-            ('x_max', self.gf('django.db.models.fields.FloatField')()),
-            ('x_min', self.gf('django.db.models.fields.FloatField')()),
-            ('y_label', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
-            ('y_units', self.gf('django.db.models.fields.CharField')(max_length=8)),
-            ('y_max', self.gf('django.db.models.fields.FloatField')()),
-            ('y_min', self.gf('django.db.models.fields.FloatField')()),
-            ('prob_x', self.gf('django.db.models.fields.DecimalField')(default=0.5, max_digits=7, decimal_places=6)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('experiments', ['BudgetLineInfo'])
-
-        # Adding model 'BudgetLine'
-        db.create_table('experiments_budgetline', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('geofence', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.Geofence'], null=True, blank=True)),
-            ('budget_line_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.BudgetLineInfo'])),
-            ('timer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.Timer'])),
-            ('timer_status', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
-        ))
-        db.send_create_signal('experiments', ['BudgetLine'])
-
-        # Adding model 'BudgetLineResult'
-        db.create_table('experiments_budgetlineresult', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('budget_line_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.BudgetLine'], null=True)),
-            ('session', self.gf('django.db.models.fields.IntegerField')(default=-1)),
-            ('line', self.gf('django.db.models.fields.IntegerField')(default=-1)),
-            ('x', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('y', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('x_intercept', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('y_intercept', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('lat', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=6)),
-            ('lon', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=9, decimal_places=6)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('winner', self.gf('django.db.models.fields.CharField')(default='-', max_length=1)),
-            ('line_chosen_boolean', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('experiments', ['BudgetLineResult'])
-
-        # Adding model 'TextQuestionInfo'
-        db.create_table('experiments_textquestioninfo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('question', self.gf('django.db.models.fields.TextField')()),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('experiments', ['TextQuestionInfo'])
-
-        # Adding model 'TextQuestion'
-        db.create_table('experiments_textquestion', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('geofence', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.Geofence'])),
-            ('text_question_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.TextQuestionInfo'])),
-        ))
-        db.send_create_signal('experiments', ['TextQuestion'])
-
-        # Adding model 'TextQuestionResult'
-        db.create_table('experiments_textquestionresult', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('text_question_info', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.TextQuestion'])),
-            ('lat', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=6)),
-            ('lon', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=9, decimal_places=6)),
-            ('response', self.gf('django.db.models.fields.TextField')()),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('experiments', ['TextQuestionResult'])
+        # Adding field 'BudgetLineResult.line_chosen_boolean'
+        db.add_column('experiments_budgetlineresult', 'line_chosen_boolean', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Timer'
-        db.delete_table('experiments_timer')
-
-        # Deleting model 'Geofence'
-        db.delete_table('experiments_geofence')
-
-        # Deleting model 'BudgetLineInfo'
-        db.delete_table('experiments_budgetlineinfo')
-
-        # Deleting model 'BudgetLine'
-        db.delete_table('experiments_budgetline')
-
-        # Deleting model 'BudgetLineResult'
-        db.delete_table('experiments_budgetlineresult')
-
-        # Deleting model 'TextQuestionInfo'
-        db.delete_table('experiments_textquestioninfo')
-
-        # Deleting model 'TextQuestion'
-        db.delete_table('experiments_textquestion')
-
-        # Deleting model 'TextQuestionResult'
-        db.delete_table('experiments_textquestionresult')
+        # Deleting field 'BudgetLineResult.line_chosen_boolean'
+        db.delete_column('experiments_budgetlineresult', 'line_chosen_boolean')
 
 
     models = {
@@ -189,8 +60,9 @@ class Migration(SchemaMigration):
             'budget_line_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.BudgetLineInfo']"}),
             'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']"}),
-            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
+            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']", 'null': 'True', 'blank': 'True'}),
+            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'experiments.budgetlineinfo': {
             'Meta': {'object_name': 'BudgetLineInfo'},
@@ -201,7 +73,7 @@ class Migration(SchemaMigration):
             'number_sessions': ('django.db.models.fields.IntegerField', [], {}),
             'prob_x': ('django.db.models.fields.DecimalField', [], {'default': '0.5', 'max_digits': '7', 'decimal_places': '6'}),
             'probabilistic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
             'x_label': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'x_max': ('django.db.models.fields.FloatField', [], {}),
             'x_min': ('django.db.models.fields.FloatField', [], {}),
@@ -240,15 +112,19 @@ class Migration(SchemaMigration):
         },
         'experiments.textquestion': {
             'Meta': {'object_name': 'TextQuestion'},
-            'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']"}),
+            'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"})
+            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"}),
+            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']", 'null': 'True', 'blank': 'True'}),
+            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'experiments.textquestioninfo': {
             'Meta': {'object_name': 'TextQuestionInfo'},
             'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'question': ('django.db.models.fields.TextField', [], {})
+            'question': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         },
         'experiments.textquestionresult': {
             'Meta': {'object_name': 'TextQuestionResult'},

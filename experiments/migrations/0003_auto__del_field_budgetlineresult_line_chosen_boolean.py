@@ -8,14 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Changing field 'BudgetLine.timer'
-        db.alter_column('experiments_budgetline', 'timer_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['experiments.Timer'], null=True))
+        # Deleting field 'BudgetLineResult.line_chosen_boolean'
+        db.delete_column('experiments_budgetlineresult', 'line_chosen_boolean')
 
 
     def backwards(self, orm):
         
-        # User chose to not deal with backwards NULL issues for 'BudgetLine.timer'
-        raise RuntimeError("Cannot reverse this migration. 'BudgetLine.timer' and its values cannot be restored.")
+        # Adding field 'BudgetLineResult.line_chosen_boolean'
+        db.add_column('experiments_budgetlineresult', 'line_chosen_boolean', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     models = {
@@ -60,8 +60,9 @@ class Migration(SchemaMigration):
             'budget_line_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.BudgetLineInfo']"}),
             'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']", 'null': 'True'}),
-            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
+            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']", 'null': 'True', 'blank': 'True'}),
+            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'experiments.budgetlineinfo': {
             'Meta': {'object_name': 'BudgetLineInfo'},
@@ -72,7 +73,7 @@ class Migration(SchemaMigration):
             'number_sessions': ('django.db.models.fields.IntegerField', [], {}),
             'prob_x': ('django.db.models.fields.DecimalField', [], {'default': '0.5', 'max_digits': '7', 'decimal_places': '6'}),
             'probabilistic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
             'x_label': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'x_max': ('django.db.models.fields.FloatField', [], {}),
             'x_min': ('django.db.models.fields.FloatField', [], {}),
@@ -89,7 +90,6 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lat': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '6'}),
             'line': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
-            'line_chosen_boolean': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'lon': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '9', 'decimal_places': '6'}),
             'session': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
@@ -111,15 +111,19 @@ class Migration(SchemaMigration):
         },
         'experiments.textquestion': {
             'Meta': {'object_name': 'TextQuestion'},
-            'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']"}),
+            'geofence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Geofence']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"})
+            'text_question_info': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.TextQuestionInfo']"}),
+            'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['experiments.Timer']", 'null': 'True', 'blank': 'True'}),
+            'timer_status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'experiments.textquestioninfo': {
             'Meta': {'object_name': 'TextQuestionInfo'},
             'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'question': ('django.db.models.fields.TextField', [], {})
+            'question': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         },
         'experiments.textquestionresult': {
             'Meta': {'object_name': 'TextQuestionResult'},
