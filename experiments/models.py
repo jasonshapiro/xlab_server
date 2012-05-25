@@ -142,10 +142,10 @@ class Experiment(models.Model):
 #add new experiments here
 class BudgetLine(Experiment):
     id = models.IntegerField(primary_key=True, editable=False)
-    info = models.ForeignKey(BudgetLineInfo)
+    budget_line_info = models.ForeignKey(BudgetLineInfo)
 
     def __unicode__(self):
-        return "%s - %s at %s on %s" % (self.id, self.info, self.geofence, self.timer)
+        return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
     
     def save(self, *args, **kwargs):
         if not self.id:
@@ -159,10 +159,10 @@ class BudgetLine(Experiment):
 
 class TextQuestion(Experiment):
     id = models.IntegerField(primary_key=True, editable=False)
-    info = models.ForeignKey(TextQuestionInfo)
+    text_question_info = models.ForeignKey(TextQuestionInfo)
 
     def __unicode__(self):
-        return "%s - %s at %s on %s" % (self.id, self.info, self.geofence, self.timer)
+        return "%s - %s at %s on %s" % (self.id, self.text_question_info, self.geofence, self.timer)
     
     def save(self, *args, **kwargs):
         if not self.id:
