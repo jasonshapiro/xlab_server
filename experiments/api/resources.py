@@ -23,6 +23,9 @@ class UserResource(ModelResource):
         excludes = ['email', 'password', 'is_superuser']
         authentication = BasicAuthentication()
         authorization = ReadOnlyAuthorization()
+        filtering = {
+            "username": ALL,
+        }
         
 class TimerResource(ModelResource):
     
