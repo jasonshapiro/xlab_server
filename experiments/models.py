@@ -80,9 +80,6 @@ class TextQuestionInfo(ExperimentInfo):
     
 class BudgetLineInfo(ExperimentInfo):
     
-    number_sessions = models.IntegerField(help_text="Any integer greater than 0. TimerStatic not supported if greater than 1.")    
-    lines_per_session = models.IntegerField()
-    
     probabilistic = models.BooleanField(default=False)
     
     MONETARY_CHOICES = (
@@ -122,6 +119,7 @@ class BudgetLineInfo(ExperimentInfo):
 #abstract
 class Experiment(models.Model):
     geofence = models.ForeignKey(Geofence, blank=True, null=True, help_text = "For reminders only. Can be blank")
+    number_sessions = models.IntegerField(help_text="Any integer greater than 0.")    
     timer = models.ForeignKey(Timer, blank=True, null=True, help_text = "Irrelevant if timer status is None.")
     TIMER_STATUS_CHOICES = (
                             (0, 'None'),
@@ -143,7 +141,7 @@ class Experiment(models.Model):
 class BudgetLine(Experiment):
     id = models.IntegerField(primary_key=True, editable=False)
     budget_line_info = models.ForeignKey(BudgetLineInfo)
-
+    
     def __unicode__(self):
         return "%s - %s at %s on %s" % (self.id, self.budget_line_info, self.geofence, self.timer)
     
@@ -176,9 +174,9 @@ class TextQuestion(Experiment):
 
 class ExperimentResult(models.Model):
     user = models.ForeignKey(User, editable=False)
-    lat = models.DecimalField(null=True,max_digits=8,decimal_places=6,editable=False)
-    lon = models.DecimalField(null=True,max_digits=9,decimal_places=6,editable=False)
-    created_date = models.DateTimeField(auto_now_add=True)
+    lat = models.DecimalField(null=True, max_digits = 8, decimal_places = 6, editable = False) #chosen by client
+    lon = models.DecimalField(null=True, max_digits = 9, decimal_places = 6, editable = False) #chosen by client
+    created_date = models.DateTimeField(auto_now_add=True, null = True) #chosen by client
     
     class Meta:
         abstract = True
@@ -186,16 +184,15 @@ class ExperimentResult(models.Model):
 class BudgetLineResult(ExperimentResult):
     budget_line = models.ForeignKey(BudgetLine, editable=False)
     session = models.IntegerField(editable=False, default=-1)
-    line = models.IntegerField(editable=False, default=-1)
-    x = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
-    y = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
+    x = models.DecimalField(max_digits=6,decimal_places=2, null = True) #chosen by client
+    y = models.DecimalField(max_digits=6,decimal_places=2, null = True) #chosen by client
     x_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     y_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     winner = models.CharField(max_length = 1, default="-", editable=False)
-    line_chosen_boolean = models.BooleanField(editable=False)
+    line_chosen_boolean = models.NullBooleanField() #chosen by client
 
     def __unicode__(self):
-        return "%s - %s" % (self.user, self.budget_line_info)
+        return "%s - %s" % (self.user, self.budget_line)
     
 class TextQuestionResult(ExperimentResult):
     text_question = models.ForeignKey(TextQuestion, editable=False)

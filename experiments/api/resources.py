@@ -1,4 +1,5 @@
 import simplejson as json
+import random
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -73,14 +74,16 @@ class ExperimentResource(ModelResource):
     
     timer = fields.ToOneField('experiments.api.resources.TimerResource', 'timer', full=True, null=True)
     geofence = fields.ToOneField('experiments.api.resources.GeofenceResource', 'geofence', full=True, null=True)
-    users = fields.ToManyField('experiments.api.resources.UserResource', 'users', full=True, null=True)
+    number_sessions = models.IntegerField(editable = False)
 
     class Meta:
         abstract = True
   
 class BudgetLineResource(ExperimentResource):
-    id = models.IntegerField(primary_key=True, editable=False)
+
+    id = models.IntegerField(primary_key=True, editable = False)
     info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
+    intercepts = fields.DictField()
 
     class Meta:
         queryset = BudgetLine.objects.all()
@@ -93,6 +96,21 @@ class BudgetLineResource(ExperimentResource):
 
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter(users=request.user)
+
+    def dehydrate(self, bundle):
+        intercepts_list = list()
+        for i in range(0, bundle.data['number_sessions']):
+            result = BudgetLineResult.objects.filter(user=bundle.request.user).filter(budget_line=BudgetLine.objects.get(pk=bundle.data['id'])).filter(session=i)
+            if len(result) == 0:
+                x_int = random.uniform(bundle.data['info'].data['x_min'], bundle.data['info'].data['x_max'])
+                y_int = random.uniform(bundle.data['info'].data['y_min'], bundle.data['info'].data['y_max'])
+                intercepts_list.append({"x_intercept": x_int, "y_intercept": y_int})
+                blr = BudgetLineResult(user = bundle.request.user, budget_line = BudgetLine.objects.get(pk = bundle.data['id']), session = i, x_intercept = x_int, y_intercept = y_int, winner = 'x' if (random.random() < bundle.data['info'].data['prob_x']) else 'y')
+                blr.save()
+            else:
+                intercepts_list.append({"x_intercept": result[0].x_intercept, "y_intercept": result[0].y_intercept})
+        bundle.data['intercepts'] = intercepts_list
+        return bundle
 
 class TextQuestionResource(ExperimentResource):
     id = models.IntegerField(primary_key=True, editable=False)
@@ -112,9 +130,14 @@ class TextQuestionResource(ExperimentResource):
 
 class BudgetLineResultResource(ModelResource):
     
-    budget_line = fields.ToOneField(BudgetLineResource, 'budget_line')
     user = fields.ToOneField(UserResource, 'user')
-    
+    budget_line = fields.ToOneField(BudgetLineResource, 'budget_line')
+  
+    def dehydrate(self, bundle):
+        bundle.data['email'] = bundle.obj.email
+
+        return bundle
+        
     class Meta:
         queryset = BudgetLineResult.objects.all()
         resource_name = 'budget_line_result'
