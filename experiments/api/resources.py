@@ -109,15 +109,15 @@ class BudgetLineResource(ExperimentResource):
                 finished = False
                 x_int = random.uniform(bundle.data['info'].data['x_min'], bundle.data['info'].data['x_max'])
                 y_int = random.uniform(bundle.data['info'].data['y_min'], bundle.data['info'].data['y_max'])
-                intercepts_list.append({"x_intercept": x_int, "y_intercept": y_int})
                 blr = BudgetLineResponse(user = bundle.request.user, budget_line = BudgetLine.objects.get(pk = bundle.data['id']), session = i, x_intercept = x_int, y_intercept = y_int, winner = 'x' if (random.random() < bundle.data['info'].data['prob_x']) else 'y', line_chosen_boolean = (i == line_chosen_index))
                 blr.save()
                 bli = BudgetLineInput(id = blr.id, budget_line_response = blr, user = bundle.request.user)
                 bli.save()
+                intercepts_list.append({"response_id": blr.id, "x_intercept": x_int, "y_intercept": y_int})
             else:
                 if response[0].eligible_for_answer:
                     finished = False
-                intercepts_list.append({"x_intercept": response[0].x_intercept, "y_intercept": response[0].y_intercept})
+                intercepts_list.append({"response_id": response[0].id, "x_intercept": response[0].x_intercept, "y_intercept": response[0].y_intercept})
         if finished:
             bundle.data['id'] = -1
         else:
@@ -125,7 +125,9 @@ class BudgetLineResource(ExperimentResource):
         return bundle
 
 class TextQuestionResource(ExperimentResource):
+
     info = fields.ToOneField('experiments.api.resources.TextQuestionInfoResource', 'text_question_info', full=True)
+    responses = fields.DictField()
 
     class Meta(ExperimentResource.Meta):
         queryset = TextQuestion.objects.all()
@@ -135,6 +137,7 @@ class TextQuestionResource(ExperimentResource):
 
     def dehydrate(self, bundle):
         finished = True
+        responses_list = list()
         for i in range(0, bundle.data['number_sessions']):
             response = TextQuestionResponse.objects.filter(user=bundle.request.user).filter(text_question=TextQuestion.objects.get(pk=bundle.data['id'])).filter(session=i)
             if len(response) == 0:
@@ -143,11 +146,15 @@ class TextQuestionResource(ExperimentResource):
                 tqr.save()
                 tqi = TextQuestionInput(id = tqr.id, text_question_response = tqr, user = bundle.request.user)
                 tqi.save()
+                responses_list.append({"response_id": tqr.id})
             else:
                 if response[0].eligible_for_answer:
                     finished = False
+                responses_list.append({"response_id": response[0].id})
         if finished:
             bundle.data['id'] = -1
+        else:
+            bundle.data['responses'] = responses_list
         return bundle
 
 #abstract
@@ -190,8 +197,8 @@ class BudgetLineInputResource(ExperimentResponseResource):
     class Meta(ExperimentResponseResource.Meta):
         queryset = BudgetLineInput.objects.all()
         resource_name = 'budget_line_input'
-        list_allowed_methods = ['patch']
-        detail_allowed_methods = ['patch']
+        list_allowed_methods = ['patch','put']
+        detail_allowed_methods = ['patch','put']
         
     def hydrate(self, bundle):
         resp = BudgetLineResponse.objects.get(id = bundle.obj.id)
@@ -209,8 +216,8 @@ class TextQuestionInputResource(ExperimentResponseResource):
     class Meta(ExperimentResponseResource.Meta):
         queryset = TextQuestionInput.objects.all()
         resource_name = 'text_question_input'
-        list_allowed_methods = ['patch']
-        detail_allowed_methods = ['patch']
+        list_allowed_methods = ['patch','put']
+        detail_allowed_methods = ['patch','put']
 
     def hydrate(self, bundle):
         logging.debug("bundle.request.user == bundle.obj.user: %s" % (bundle.request.user == bundle.obj.user))
