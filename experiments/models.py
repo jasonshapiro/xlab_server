@@ -172,31 +172,60 @@ class TextQuestion(Experiment):
             self.id = maxID + 1
         super(TextQuestion, self).save(*args, **kwargs)
 
-class ExperimentResult(models.Model):
-    user = models.ForeignKey(User, editable=False)
+#abstract
+class ExperimentResponse(models.Model):
+    eligible_for_answer = models.BooleanField(default=True, editable=False, help_text = "True unless timed out or already answered")
+    user = models.ForeignKey(User, editable = False)
     lat = models.DecimalField(null=True, max_digits = 8, decimal_places = 6, editable = False) #chosen by client
     lon = models.DecimalField(null=True, max_digits = 9, decimal_places = 6, editable = False) #chosen by client
-    created_date = models.DateTimeField(auto_now_add=True, null = True) #chosen by client
+    created_date = models.DateTimeField(auto_now_add=True, null = True, editable = False) #chosen by client
+    session = models.IntegerField(editable=False, default=-1)
     
     class Meta:
         abstract = True
 
-class BudgetLineResult(ExperimentResult):
+
+class BudgetLineResponse(ExperimentResponse):
     budget_line = models.ForeignKey(BudgetLine, editable=False)
-    session = models.IntegerField(editable=False, default=-1)
-    x = models.DecimalField(max_digits=6,decimal_places=2, null = True) #chosen by client
-    y = models.DecimalField(max_digits=6,decimal_places=2, null = True) #chosen by client
+    x = models.DecimalField(max_digits=6,decimal_places=2, null = True, editable = False) #chosen by client
+    y = models.DecimalField(max_digits=6,decimal_places=2, null = True, editable = False) #chosen by client
     x_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     y_intercept = models.DecimalField(max_digits=6,decimal_places=2,editable=False)
     winner = models.CharField(max_length = 1, default="-", editable=False)
-    line_chosen_boolean = models.NullBooleanField() #chosen by client
+    line_chosen_boolean = models.NullBooleanField(editable=False)
 
     def __unicode__(self):
-        return "%s - %s" % (self.user, self.budget_line)
+        return "%s - %s, session %s" % (self.user, self.budget_line, self.session)
     
-class TextQuestionResult(ExperimentResult):
+class TextQuestionResponse(ExperimentResponse):
     text_question = models.ForeignKey(TextQuestion, editable=False)
-    response = models.TextField(editable=False)
+    answer = models.TextField(editable=False)
 
     def __unicode__(self):
         return "%s - %s" % (self.id, self.user)
+    
+#Use this so sensative input is not exposed to the api
+
+#abstract
+class ExperimentInput(models.Model):
+    user = models.ForeignKey(User, editable = False)    
+    lat = models.DecimalField(null=True, max_digits = 8, decimal_places = 6, editable = False) #chosen by client
+    lon = models.DecimalField(null=True, max_digits = 9, decimal_places = 6, editable = False) #chosen by client
+    created_date = models.DateTimeField(auto_now_add=True, null = True, editable = False) #chosen by client
+    
+    class Meta:
+        abstract = True
+
+class BudgetLineInput(ExperimentInput):
+    budget_line_response = models.ForeignKey(BudgetLineResponse, editable=False)
+    progress = models.IntegerField(null = True,editable=False)
+
+    def __unicode__(self):
+        return "%s" % (self.id)
+    
+class TextQuestionInput(ExperimentInput):
+    text_question_response = models.ForeignKey(TextQuestionResponse, editable=False)
+    answer = models.TextField(null = True,editable=False)
+
+    def __unicode__(self):
+        return "%s" % (self.id)

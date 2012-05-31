@@ -9,8 +9,9 @@ admin.autodiscover()
 v1_api = Api(api_name='v1')
 v1_api.register(UserResource())
 v1_api.register(TextQuestionResource())
+v1_api.register(TextQuestionInputResource())
 v1_api.register(BudgetLineResource())
-v1_api.register(BudgetLineResultResource())
+v1_api.register(BudgetLineInputResource())
 
 urlpatterns = patterns('',
 

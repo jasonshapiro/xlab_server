@@ -16,28 +16,32 @@ class TextQuestionAdmin(admin.ModelAdmin):
     list_display = ('id', 'text_question_info', 'number_sessions', 'geofence', 'timer', 'timer_status', 'usernames')
 
 class BudgetLineInfoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'number_sessions', 'lines_per_session',
+    list_display = ('id', 'title',
                     'probabilistic', 'currency',
                     'x_label', 'x_units', 'x_max', 'x_min',
                     'y_label', 'y_units', 'y_max', 'y_min',
                     'prob_x',
                     'created_date')
 
-class BudgetLineResultAdmin(admin.ModelAdmin):
-    list_display = ('user',  'budget_line', 'session', 'x', 'y', 'x_intercept', 'y_intercept', "winner", "line_chosen_boolean",
-                    'lat', 'lon', 'created_date')
+class BudgetLineResponseAdmin(admin.ModelAdmin):
+    list_display = ('id',  'user',  'created_date', 'lat', 'lon', 'budget_line', 'session', 'x', 'y', 'x_intercept', 'y_intercept', "winner", "line_chosen_boolean",
+                    'eligible_for_answer')
 
 class TextQuestionInfoAdmin(admin.ModelAdmin):
     list_display = ('id',  'question', 'created_date')
 
-class TextQuestionResultAdmin(admin.ModelAdmin):
-    list_display = ('id',  'user', 'text_question', 'response', 'created_date')
+class TextQuestionResponseAdmin(admin.ModelAdmin):
+    list_display = ('id',  'user', 'created_date', 'lat', 'lon', 'text_question', 'session', 'answer', 'eligible_for_answer')
+
+class TextQuestionInputAdmin(admin.ModelAdmin):
+    list_display = ('id',  'user', 'created_date', 'lat', 'lon', 'text_question_response', 'answer')
 
 admin.site.register(Timer, TimerAdmin)
 admin.site.register(Geofence, GeoFenceAdmin)
 admin.site.register(BudgetLine,BudgetLineAdmin)
 admin.site.register(BudgetLineInfo,BudgetLineInfoAdmin)
-admin.site.register(BudgetLineResult,BudgetLineResultAdmin)
+admin.site.register(BudgetLineResponse,BudgetLineResponseAdmin)
 admin.site.register(TextQuestion,TextQuestionAdmin)
 admin.site.register(TextQuestionInfo,TextQuestionInfoAdmin)
-admin.site.register(TextQuestionResult, TextQuestionResultAdmin)
+admin.site.register(TextQuestionResponse, TextQuestionResponseAdmin)
+admin.site.register(TextQuestionInput, TextQuestionInputAdmin)

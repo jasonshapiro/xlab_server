@@ -1,5 +1,6 @@
 import simplejson as json
 import random
+import logging
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -14,12 +15,14 @@ from tastypie.serializers import Serializer
 
 from experiments.models import *
 
+MAX_PROGRESS = 100
+
 class UserResource(ModelResource):
     
     class Meta:
         queryset = User.objects.all()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
         resource_name = 'auth/user'
         excludes = ['email', 'password', 'is_superuser']
         authentication = BasicAuthentication()
@@ -76,72 +79,145 @@ class ExperimentResource(ModelResource):
     geofence = fields.ToOneField('experiments.api.resources.GeofenceResource', 'geofence', full=True, null=True)
     number_sessions = models.IntegerField(editable = False)
 
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter(users=request.user)
+
     class Meta:
         abstract = True
+        include_resource_uri = False
+        authentication = BasicAuthentication()
+        authorization = ReadOnlyAuthorization()
   
 class BudgetLineResource(ExperimentResource):
-
-    id = models.IntegerField(primary_key=True, editable = False)
+    
     info = fields.ToOneField('experiments.api.resources.BudgetLineInfoResource', 'budget_line_info', full=True)
     intercepts = fields.DictField()
 
-    class Meta:
+    class Meta(ExperimentResource.Meta):
         queryset = BudgetLine.objects.all()
         resource_name = 'budget_line'
-        include_resource_uri = False
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
-        authentication = BasicAuthentication()
-        authorization = ReadOnlyAuthorization()
-
-    def apply_authorization_limits(self, request, object_list):
-        return object_list.filter(users=request.user)
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
 
     def dehydrate(self, bundle):
+        finished = True
         intercepts_list = list()
+        line_chosen_index = random.randrange(bundle.data['number_sessions'])
         for i in range(0, bundle.data['number_sessions']):
-            result = BudgetLineResult.objects.filter(user=bundle.request.user).filter(budget_line=BudgetLine.objects.get(pk=bundle.data['id'])).filter(session=i)
-            if len(result) == 0:
+            response = BudgetLineResponse.objects.filter(user=bundle.request.user).filter(budget_line=BudgetLine.objects.get(pk=bundle.data['id'])).filter(session=i)
+            if len(response) == 0:
+                finished = False
                 x_int = random.uniform(bundle.data['info'].data['x_min'], bundle.data['info'].data['x_max'])
                 y_int = random.uniform(bundle.data['info'].data['y_min'], bundle.data['info'].data['y_max'])
                 intercepts_list.append({"x_intercept": x_int, "y_intercept": y_int})
-                blr = BudgetLineResult(user = bundle.request.user, budget_line = BudgetLine.objects.get(pk = bundle.data['id']), session = i, x_intercept = x_int, y_intercept = y_int, winner = 'x' if (random.random() < bundle.data['info'].data['prob_x']) else 'y')
+                blr = BudgetLineResponse(user = bundle.request.user, budget_line = BudgetLine.objects.get(pk = bundle.data['id']), session = i, x_intercept = x_int, y_intercept = y_int, winner = 'x' if (random.random() < bundle.data['info'].data['prob_x']) else 'y', line_chosen_boolean = (i == line_chosen_index))
                 blr.save()
+                bli = BudgetLineInput(id = blr.id, budget_line_response = blr, user = bundle.request.user)
+                bli.save()
             else:
-                intercepts_list.append({"x_intercept": result[0].x_intercept, "y_intercept": result[0].y_intercept})
-        bundle.data['intercepts'] = intercepts_list
+                if response[0].eligible_for_answer:
+                    finished = False
+                intercepts_list.append({"x_intercept": response[0].x_intercept, "y_intercept": response[0].y_intercept})
+        if finished:
+            bundle.data['id'] = -1
+        else:
+            bundle.data['intercepts'] = intercepts_list
         return bundle
 
 class TextQuestionResource(ExperimentResource):
-    id = models.IntegerField(primary_key=True, editable=False)
     info = fields.ToOneField('experiments.api.resources.TextQuestionInfoResource', 'text_question_info', full=True)
 
-    class Meta:
+    class Meta(ExperimentResource.Meta):
         queryset = TextQuestion.objects.all()
         resource_name = 'text_question'
-        include_resource_uri = False
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
-        authentication = BasicAuthentication()
-        authorization = ReadOnlyAuthorization()
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
 
-    def apply_authorization_limits(self, request, object_list):
-        return object_list.filter(users=request.user)
+    def dehydrate(self, bundle):
+        finished = True
+        for i in range(0, bundle.data['number_sessions']):
+            response = TextQuestionResponse.objects.filter(user=bundle.request.user).filter(text_question=TextQuestion.objects.get(pk=bundle.data['id'])).filter(session=i)
+            if len(response) == 0:
+                finished = False
+                tqr = TextQuestionResponse(user = bundle.request.user, text_question = TextQuestion.objects.get(pk = bundle.data['id']), session = i, answer = "")
+                tqr.save()
+                tqi = TextQuestionInput(id = tqr.id, text_question_response = tqr, user = bundle.request.user)
+                tqi.save()
+            else:
+                if response[0].eligible_for_answer:
+                    finished = False
+        if finished:
+            bundle.data['id'] = -1
+        return bundle
 
-class BudgetLineResultResource(ModelResource):
+#abstract
+class ExperimentResponseResource(ModelResource):
     
     user = fields.ToOneField(UserResource, 'user')
-    budget_line = fields.ToOneField(BudgetLineResource, 'budget_line')
-  
-    def dehydrate(self, bundle):
-        bundle.data['email'] = bundle.obj.email
 
-        return bundle
-        
     class Meta:
-        queryset = BudgetLineResult.objects.all()
-        resource_name = 'budget_line_result'
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post']
+        abstract = True
         authentication = BasicAuthentication()
         authorization = Authorization()
+        
+class BudgetLineResponseResource(ExperimentResponseResource):
+    
+    experiment = fields.ToOneField(BudgetLineResource, 'budget_line')
+
+    class Meta(ExperimentResponseResource.Meta):
+        queryset = BudgetLineResponse.objects.all()
+        
+class TextQuestionResponseResource(ExperimentResponseResource):
+    
+    experiment = fields.ToOneField(TextQuestionResource, 'text_question')
+
+    class Meta(ExperimentResponseResource.Meta):
+        queryset = BudgetLineResponse.objects.all()
+        resource_name = 'budget_line_input'
+        
+#abstract
+class ExperimentInputResource(ModelResource):
+    
+    user = fields.ToOneField(UserResource, 'user')
+
+    class Meta:
+        abstract = True
+        authentication = BasicAuthentication()
+        authorization = Authorization()
+        
+class BudgetLineInputResource(ExperimentResponseResource):
+    
+    class Meta(ExperimentResponseResource.Meta):
+        queryset = BudgetLineInput.objects.all()
+        resource_name = 'budget_line_input'
+        list_allowed_methods = ['patch']
+        detail_allowed_methods = ['patch']
+        
+    def hydrate(self, bundle):
+        resp = BudgetLineResponse.objects.get(id = bundle.obj.id)
+        if ((bundle.request.user == bundle.obj.user) & bundle.obj.budget_line_response.eligible_for_answer):
+            if (bundle.data['progress'] >= 0):#ignores non-response due to restrictive timer
+                slope = resp.y_intercept / resp.x_intercept
+                resp.x = resp.x_intercept * bundle.data['progress'] / MAX_PROGRESS
+                resp.y = resp.y_intercept - slope * resp.x_intercept * bundle.data['progress'] / MAX_PROGRESS
+            resp.eligible_for_answer = False
+            resp.save()
+        return bundle
+
+class TextQuestionInputResource(ExperimentResponseResource):
+    
+    class Meta(ExperimentResponseResource.Meta):
+        queryset = TextQuestionInput.objects.all()
+        resource_name = 'text_question_input'
+        list_allowed_methods = ['patch']
+        detail_allowed_methods = ['patch']
+
+    def hydrate(self, bundle):
+        logging.debug("bundle.request.user == bundle.obj.user: %s" % (bundle.request.user == bundle.obj.user))
+        resp = TextQuestionResponse.objects.get(id = bundle.obj.id)
+        if ((bundle.request.user == bundle.obj.user) & bundle.obj.text_question_response.eligible_for_answer):
+            if (bundle.data['answer'] != 'blank_tag'):#ignores non-response due to restrictive timer
+                resp.answer = bundle.data['answer']
+            resp.eligible_for_answer = False
+            resp.save()
+        return bundle
