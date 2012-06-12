@@ -2,23 +2,32 @@
  * @author Jason Shapiro
  */
 
-//// AJAX
 
-function capitaliseFirstLetter(string)
-	{
-	    return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
 	
+	
+function dialogGenerator(data1) {
+	$("#content").prepend('<div class="dialog">','</div>')
+	for (x in data1.objects) {
+		$("#dialog").append('<submit id="objectno' + x.id + '" value="' + x.info.title + '">')
+	}
+};
+
 
 /// if this round is chose, you will get a ___ with a 50% chance and ___ with a 50% chance.
-function budgetGenerator (data1) {
-//var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 200.0, "y_units": "dollars", "lines_per_session": 50, "x_label": "", "y_label": "", "title": "Cash Money", "currency": "$", "number_sessions": 1, "x_units": "dollars", "x_max": 200.0, "x_min": 100.0, "probabilistic": true, "id": 13, "y_min": 100.0}};
-var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 20.0, "y_units": "pounds", "lines_per_session": 50, "x_label": "apples", "y_label": "oranges", "title": "Apples or Oranges", "currency": "-", "number_sessions": 1, "x_units": "pounds", "x_max": 30.0, "x_min": 10.0, "probabilistic": false, "id": 4, "y_min": 10.0}};
 
-//function budgetGenerator(data1) {
-		
-	var xdata = (data1.budget_line_info.x_max - data1.budget_line_info.x_min) * Math.random() + data1.budget_line_info.x_min
-	var ydata = (data1.budget_line_info.y_max - data1.budget_line_info.y_min) * Math.random() + data1.budget_line_info.y_min
+function budgetGenerator(data1, objectno, responseno) {
+	
+	$(".dialog").remove()
+	$("#loading").show().fadeOut(1000);
+
+	var objectno = (typeof objectno !== 'undefined') ? objectno : 0;
+	var responseno = (typeof responseno !== 'undefined') ? responseno : 1;
+				
+	var xdata = (data1.objects[objectno].info.x_max - data1.objects[objectno].info.x_min) * Math.random() + data1.objects[objectno].info.x_min
+	var ydata = (data1.objects[objectno].info.y_max - data1.objects[objectno].info.y_min) * Math.random() + data1.objects[objectno].info.y_min
 	
 	/// Display Formatting Functions
 	
@@ -26,23 +35,23 @@ var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 20.0, "y_units": "poun
 	
 	/// Data Formatting for Different Types (requires currency to be '-' for non-monetary values)
 	
-	if (data1.budget_line_info.currency != '-') {
-		var xmax = ymax = Math.max(data1.budget_line_info.x_max, data1.budget_line_info.y_max);
+	if (data1.objects[objectno].info.currency != '-') {
+		var xmax = ymax = Math.max(data1.objects[objectno].info.x_max, data1.objects[objectno].info.y_max);
 		var xlabel = ylabel = '';
-		var curlabel = data1.budget_line_info.currency;
+		var curlabel = data1.objects[objectno].info.currency;
 		var unitdecimal = 2;
 	}
 	else {
-		var xmax = data1.budget_line_info.x_max;
-		var ymax = data1.budget_line_info.y_max;
-		var xlabel = capitaliseFirstLetter(data1.budget_line_info.x_units) + " of " + capitaliseFirstLetter(data1.budget_line_info.x_label);
-		var ylabel = capitaliseFirstLetter(data1.budget_line_info.y_units) + " of " + capitaliseFirstLetter(data1.budget_line_info.y_label);
+		var xmax = data1.objects[objectno].info.x_max;
+		var ymax = data1.objects[objectno].info.y_max;
+		var xlabel = capitaliseFirstLetter(data1.objects[objectno].info.x_units) + " of " + capitaliseFirstLetter(data1.objects[objectno].info.x_label);
+		var ylabel = capitaliseFirstLetter(data1.objects[objectno].info.y_units) + " of " + capitaliseFirstLetter(data1.objects[objectno].info.y_label);
 		var curlabel = '';
 		var unitdecimal = 1;
 	};
 	
+
 	// Plot Intialization
-	
 	
 	var placeholder = $('#placeholder');
 	
@@ -73,6 +82,11 @@ var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 20.0, "y_units": "poun
 	
 	
 	var plot = $.plot(placeholder, data, options);
+	;
+	
+	window.setTimeout(function() {
+		$("#wrapper").animate({opacity: 1}, 1000)
+		}, 1000);
 	
 	
 	// Slider Initialization
@@ -82,9 +96,19 @@ var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 20.0, "y_units": "poun
 		max: xdata.toFixed(unitdecimal),
 		step: Math.pow(.1,unitdecimal),
 		slide: function( event, ui ) {
+				
+				// Aesthetic Hack: y value displaying as -0.0
+				
+				var yval = (ydata - (ydata/xdata)*ui.value).toFixed(unitdecimal);
+					
 				$( "#displayx" ).val( curlabel + ui.value + " " + xlabel );
-				$( "#displayy" ).val( curlabel + (ydata - (ydata/xdata)*ui.value).toFixed(unitdecimal) + " " + ylabel );
-								
+				if (yval <= 0) {
+					$( "#displayy" ).val( curlabel + 0 + " " + ylabel );	
+				}
+				else {
+					$( "#displayy" ).val( curlabel + yval + " " + ylabel );	
+				};
+		
 				var dataSet = [{ 
 				data: [[xdata,0], [0, ydata]],
 				lines: { show: true, fill: true }
@@ -106,33 +130,44 @@ var data1 = {"budget_line_info": {"prob_x": 0.5, "y_max": 20.0, "y_units": "poun
 
 //////// TODO: Automatically Focus Slider For keyboard movement	$( "sliderd" ).slider().focus()
 
-///	$( "#submit" ).click(function() {
-		
-//	})
+}; // end budgetGenerator
 
-/// TODO: parameter for post be client.desktop
+// Beginning of Script 
 
+var objectnum;
+var responsenum;
+var globaldata;
 
-};
+$(document).ready(function() {
 
+	$("#wrapper").css("opacity",".01");
+	
+	var url = "http://127.0.0.1/api/v1/budget_line/?format=json";
+	
+	$.ajax(url, {
+		dataType: "json",
+		crossDomain: true,
+		success: function(data) {
+			console.log(data);
+			globaldata = data;
+			$("#loading").hide();
+			
+			if (data.objects.length == 0 || data.objects === "undefined") {
+				// Display Message about no experiments
+			}
+			else {
+				
+			}
+			
+			
+			
+			
+			
+			
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert('Failure: ' + XMLHttpRequest + "\n TextStatus: " + textStatus + "\n Error Thrown: " + errorThrown )
+		}
+	});
 
-
-var url = "http://127.0.0.1/experiments/budget/?format=json";
-
-console.log(url)
-
-
-$.ajax(url, {
-	dataType: "json",
-	crossDomain: true,
-	success: function(data) {
-		console.log(data);
-		budgetGenerator(data);
-	},
-	error: function(XMLHttpRequest, textStatus, errorThrown) {
-		alert('Failure: ' + XMLHttpRequest + "\n TextStatus: " + textStatus + "\n Error Thrown: " + errorThrown )
-	}
 });
-
-
-

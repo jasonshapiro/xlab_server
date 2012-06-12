@@ -10,6 +10,9 @@ from django.core import serializers
 from django.forms.models import model_to_dict
 from decimal import Decimal
 from django.shortcuts import render_to_response
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
@@ -22,9 +25,9 @@ class DecimalEncoder(json.JSONEncoder):
 
 def index(request):
    
-   return render_to_response('experiments/index.html')
+   return render_to_response('experiments/index.html',context_instance=RequestContext(request))
 
-
+@login_required
 def budgetline_experiment(request):
     
-    return render_to_response('budgetline/budgetline_experiment.html')
+    return render_to_response('budgetline/budgetline_experiment.html',context_instance=RequestContext(request))
