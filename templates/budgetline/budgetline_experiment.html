@@ -8,7 +8,9 @@
 
 	<script type="text/javascript" src="/static/web/js/third-party/jquery-ui-1.8.7.custom.min.js"></script>
 	<script type="text/javascript" src ="/static/web/js/jquery.flot.js"></script>
-	<script type="text/javascript" src="/static/web/js/budgetlinedata.js"></script> {% endblock scripts %}
+	<script type="text/javascript" src="/static/web/js/budgetlinedata.js"></script>
+	
+{% endblock scripts %}
 		 
 {% block title %} Budget Line Experiment {% endblock title %}
 
@@ -27,10 +29,10 @@
 		<p>		
 			
 			<label for="displayx"> X Axis: </label>
-			<input type="text" id="displayx" readonly="true" style="border:0; color:#f6931f; font-weight:bold;" />
+			<input type="text" id="displayx" readonly="true" style="border:0; color:#f6931f; font-weight:bold; width:200px;" />
 			<br/>
 			<label for="displayy"> Y Axis: </label>
-			<input type="text" id="displayy" readonly="true" style="border:0; color:#f6931f; font-weight:bold;" />
+			<input type="text" id="displayy" readonly="true" style="border:0; color:#f6931f; font-weight:bold; width:200px;" />
 	
 		</p>
 	
@@ -38,6 +40,5 @@
 		
 	</div>
 	
-		
 
 {% endblock content %}
