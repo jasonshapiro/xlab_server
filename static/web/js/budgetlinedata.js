@@ -195,7 +195,7 @@ $(document).ready(function() {
 				alert('You have no experiments. Please contact an administrator.');				
 			}
 			else if (data.objects.length == 1) {
-				budgetGenerator(data)
+				budgetGenerator(data,0,0)
 			}
 			else {
 				dialogGenerator(data)
