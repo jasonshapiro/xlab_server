@@ -155,7 +155,7 @@ function budgetGenerator(data1, objectno, interceptno) {
 						budgetGenerator(globaldata, objectglo, interceptglo);
 					},
 					error: function() {
-						alert('Whoops, Something went Wrong!') // TODO: FIX COPY
+						alert('Error: Contact an adminstrator and tell them that Jason screwed up.') // TODO: FIX COPY
 					}
 				})
 			
@@ -188,12 +188,14 @@ $(document).ready(function() {
 		dataType: "json",
 		crossDomain: true,
 		success: function(data) {
-			console.log(data);
 			globaldata = data;
 			$("#loading").hide();
 			
 			if (data.objects.length == 0 || data.objects === "undefined") {
-				// Display Message about no experiments
+				alert('You have no experiments. Please contact an administrator.');				
+			}
+			else if (data.objects.length == 1) {
+				budgetGenerator(data)
 			}
 			else {
 				dialogGenerator(data)
