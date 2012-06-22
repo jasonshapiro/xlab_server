@@ -29,7 +29,7 @@ function budgetGenerator(data1, objectno, interceptno) {
 
 // Not Robust - Add error catching for edge cases
 	
-	if (data1.objects[objectno].intercepts == null || typeof data1.objects[objectno].intercepts[interceptno] === 'undefined') {
+	if (data1.objects[objectno].intercepts == null || typeof data1.objects[objectno].intercepts[interceptglo] === 'undefined') {
 		$( "#wrapper" ).hide();
 		$( "#content" ).prepend('<h1> The Experiment is Complete </h1>', '<p> Click <a href="http://xmobile.berkeley.edu/"> here </a> to return to the homepage. </p>')
 	}
