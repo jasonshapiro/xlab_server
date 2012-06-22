@@ -5,10 +5,11 @@ import logging
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from django.http import HttpResponse
 
 from tastypie import fields
 from tastypie.resources import ModelResource, ALL
-from tastypie.authentication import BasicAuthentication
+from tastypie.authentication import BasicAuthentication, ApiKeyPlusWebAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
@@ -85,7 +86,7 @@ class ExperimentResource(ModelResource):
     class Meta:
         abstract = True
         include_resource_uri = False
-        authentication = BasicAuthentication()
+        authentication = ApiKeyPlusWebAuthentication()
         authorization = ReadOnlyAuthorization()
   
 class BudgetLineResource(ExperimentResource):
@@ -164,7 +165,7 @@ class ExperimentResponseResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = BasicAuthentication()
+        authentication = ApiKeyPlusWebAuthentication()
         authorization = Authorization()
         
 class BudgetLineResponseResource(ExperimentResponseResource):
@@ -189,7 +190,7 @@ class ExperimentInputResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = BasicAuthentication()
+        authentication = ApiKeyPlusWebAuthentication()
         authorization = Authorization()
         
 class BudgetLineInputResource(ExperimentResponseResource):

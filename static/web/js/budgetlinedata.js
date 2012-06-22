@@ -150,8 +150,6 @@ function budgetGenerator(data1, objectno, interceptno) {
 					data: '{"progress": ' + Math.round(100 * $( "#sliderd").slider( "value" ) / globaldata.objects[objectglo].intercepts[interceptglo].x_intercept) + '}',
 					type: 'PUT',
 					contentType: "application/json",
-					username: 'xlab',
-					password: 'xlab',
 					success: function() {
 						interceptglo++;
 						budgetGenerator(globaldata, objectglo, interceptglo);

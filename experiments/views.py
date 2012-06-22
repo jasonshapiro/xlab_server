@@ -12,7 +12,7 @@ from decimal import Decimal
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-
+from tastypie.models import create_api_key
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
