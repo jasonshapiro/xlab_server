@@ -31,3 +31,13 @@ def index(request):
 def budgetline_experiment(request):
     
     return render_to_response('budgetline/budgetline_experiment.html',context_instance=RequestContext(request))
+
+@login_required
+def budgetline_consent(request):
+    
+    return render_to_response('budgetline/budgetline_consent.html',context_instance=RequestContext(request))
+
+
+def budgetline_instructions(request):
+    
+    return render_to_response('budgetline/budgetline_instructions.html',context_instance=RequestContext(request))
