@@ -31,7 +31,7 @@ function budgetGenerator(data1, objectno, interceptno) {
 	
 	if (data1.objects[objectno].intercepts == null || typeof data1.objects[objectno].intercepts[interceptno] === 'undefined') {
 		$( "#wrapper" ).hide();
-		$( "#content" ).prepend('<h1> The Experiment is Complete </h1>', '<p> Click <a href="http://127.0.0.1/"> here </a> to return to the homepage. </p>')
+		$( "#content" ).prepend('<h1> The Experiment is Complete </h1>', '<p> Click <a href="http://xmobile.berkeley.edu/"> here </a> to return to the homepage. </p>')
 	}
 	else {
 					
@@ -140,7 +140,7 @@ function budgetGenerator(data1, objectno, interceptno) {
 	
 		$( "#senddata" ).click(function() {
 			$( "#senddata" ).unbind();
-			var url = 'http://127.0.0.1/api/v1/budget_line_input/' + globaldata.objects[objectglo].intercepts[interceptglo].response_id + '/';
+			var url = 'http://xmobile.berkeley.edu/api/v1/budget_line_input/' + globaldata.objects[objectglo].intercepts[interceptglo].response_id + '/';
 			$("#wrapper").animate({opacity: .01}, 300);
 			
 			window.setTimeout(function() {
@@ -182,7 +182,7 @@ $(document).ready(function() {
 
 	$("#wrapper").css("opacity",".01");
 	
-	var url = "http://127.0.0.1/api/v1/budget_line/?format=json";
+	var url = "http://xmobile.berkeley.edu/api/v1/budget_line/?format=json";
 	
 	$.ajax(url, {
 		dataType: "json",
