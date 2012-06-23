@@ -9,7 +9,7 @@ from django.http import HttpResponse
 
 from tastypie import fields
 from tastypie.resources import ModelResource, ALL
-from tastypie.authentication import BasicAuthentication, ApiKeyPlusWebAuthentication
+from tastypie.authentication import BasicAuthentication, BasicAuthenticationPlus
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.authorization import Authorization
 from tastypie.serializers import Serializer
@@ -86,7 +86,7 @@ class ExperimentResource(ModelResource):
     class Meta:
         abstract = True
         include_resource_uri = False
-        authentication = ApiKeyPlusWebAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = ReadOnlyAuthorization()
   
 class BudgetLineResource(ExperimentResource):
@@ -165,7 +165,7 @@ class ExperimentResponseResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = ApiKeyPlusWebAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = Authorization()
         
 class BudgetLineResponseResource(ExperimentResponseResource):
@@ -190,7 +190,7 @@ class ExperimentInputResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = ApiKeyPlusWebAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = Authorization()
         
 class BudgetLineInputResource(ExperimentResponseResource):
