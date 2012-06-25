@@ -1,6 +1,6 @@
 {% extends "experiments/base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Home{% endblock title %}
 
 {% block content %}
     <div id="splash" class="hidden">
@@ -19,8 +19,8 @@
 	        </p>
 
    	        <p>
-   	        	<a href="/experiments/budgetline_consent/" class="green-button" style="margin: 0 5px">Experiments</a>
-				<a href="/admin/experiments/" class="green-button" style="margin: 0 5px">Administrators</a>
+   	        	<a href="/experiments/budgetline_consent/" class="green-button" style="margin: 0 5px 0 0; padding: 8px 38px">XLab Participants</a>
+				<a href="/admin/experiments/" class="green-button" style="margin: 0 0 0 5px; padding: 8px 38px">Administrators</a>
 	        </p>
 
 	                
@@ -28,4 +28,4 @@
         
         <div class="clear"></div>
     </div>
-{% endblock %}
+{% endblock content %}
