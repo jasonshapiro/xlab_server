@@ -86,7 +86,7 @@ class ExperimentResource(ModelResource):
     class Meta:
         abstract = True
         include_resource_uri = False
-        authentication = BasicAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = ReadOnlyAuthorization()
   
 class BudgetLineResource(ExperimentResource):
@@ -165,7 +165,7 @@ class ExperimentResponseResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = BasicAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = Authorization()
         
 class BudgetLineResponseResource(ExperimentResponseResource):
@@ -190,7 +190,7 @@ class ExperimentInputResource(ModelResource):
 
     class Meta:
         abstract = True
-        authentication = BasicAuthentication()
+        authentication = BasicAuthenticationPlus()
         authorization = Authorization()
         
 class BudgetLineInputResource(ExperimentResponseResource):

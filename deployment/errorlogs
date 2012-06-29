@@ -1,0 +1,4 @@
+#!/bin/bash
+# Error Logs
+
+gnome-terminal --tab --title="UWSGI" -e "tail -f /opt/log/uwsgi/xlab.log" --tab --title="Django" -e "tail -f /opt/log/django/xlab.log" --tab --title="Nginx-Error" -e "tail -f /opt/log/nginx/error.log" --tab --title="Nginx-Access" -e "tail -f /opt/log/nginx/access.log"

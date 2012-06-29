@@ -92,12 +92,16 @@ Sync the database (make sure the virtualenv is still activated)
 
 	./manage.py syncdb
 
+When prompted, created a user called xlab. Give it password xlab and email xtech@haas.berkeley.edu
+
 Migrate apps managed under South (make sure the virtualenv is still activated)
 
 	./manage.py migrate experiments
 	./manage.py migrate tastypie
 
-When prompted, created a user called xlab. Give it password xlab and email xtech@haas.berkeley.edu
+Change the server_name to the IP address of your instance -- e.g. server_name ec2-23-22-54-187.compute-1.amazonaws.com; (no http://)
+
+	sudo vim /opt/django-trunk/xlab_server/deployment/xlab_nginx.conf
 
 Copy nginx config file
 
@@ -110,6 +114,10 @@ Link this file in sites-available
 Copy the Upstart file to the appropriate folder
 
 	sudo cp /opt/django-trunk/xlab_server/deployment/xlab_uwsgi.conf /etc/init/xlab_uwsgi.conf
+
+Copy the Modified Tastypie Authentication Source Code into the appropriate folder
+
+	sudo cp /opt/django-trunk/xlab_server/deployment/new_authentication.py /opt/venvs/xlab_env/lib/python2.7/site-packages/tastypie/authentication.py
 
 Start uwsgi
 
@@ -176,4 +184,3 @@ Restart the server
 or, preferably,	reboot
 
 	sudo reboot
-	
